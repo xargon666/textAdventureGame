@@ -1,0 +1,49 @@
+*, *::before, *::after{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    overflow:auto;
+    font-family: Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        margin:auto;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        background-color:#333;
+        width:100vw;
+        height:100vh;
+    }
+
+    .container {
+        margin:auto;
+        width:600px;
+        max-width:75%;
+        background-color:#fff;
+        padding:10px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px 2px;
+    }
+
+    .btn-grid{
+        display:grid;
+        grid-template-columns:repeat(2,auto);
+        gap:10px;
+        margin-top:20px;
+    }
+
+    .btn{
+        background-color: rgb(30, 102, 161);
+        border: 1px solid #c8c7c8;
+        border-radius: 5px;
+        padding: 5px 10px;
+        color:#fff;
+        outline:none;
+    }
+
+    .btn:hover{
+        border-color:#ccc;
+        background-color: rgb(39, 133, 209);
+    }
+
