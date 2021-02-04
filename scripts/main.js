@@ -1,6 +1,4 @@
-alert('Hello Wolrd!');
-
-const textElement = document.getElementbyId('text')
+const textElement = document.getElementById('text')
 const optionButtonsElement = document.getElementById('option-buttons')
 let state = {}
 
@@ -12,6 +10,7 @@ function startGame() {
 function showTextNode(textNodeIndex) {
     const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
     textElement.innerText = textNode.text
+
 }
 
 function selectOption(option) {
