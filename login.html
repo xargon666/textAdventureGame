@@ -6,12 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Star Mystery | Login</title>
-    <script defer src="scripts/main.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/form.js"></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
+    <section id="login">
+        <div class="container">
+            <form>
+                <label>
+                    eNTER nAME: <input type="text" id="user-name" />
+            </label>
 
+                <label>
+                    eNTER eMail:<input type="email" id="email" />
+            </label>
+                <input type="button" id="submit" value="eNTER" onclick="location.href='../Index.html'" />
+            </form>
+        </div>
+    </section>
 </body>
 
 </html>
