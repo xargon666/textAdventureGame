@@ -1,5 +1,17 @@
-const textElement = document.getElementById('text')
-const optionButtonsElement = document.getElementById('option-buttons')
+const textElement = document.getElementById('text');
+const optionButtonsElement = document.getElementById('option-buttons');
+const loginButton = document.getElementById('login-button');
+const submitButton = document.getElementById('submit-button');
+
+loginButton.onclick = function() {
+    location.href = "login.html";
+};
+
+submitButton.onclick = function() {
+    location.href = "game.html";
+};
+
+// GAME DATA
 let state = {}
 
 function startGame() {
@@ -32,19 +44,17 @@ function showOption(option) {
 
 function selectOption(option) {
     const nextTextNodeId = option.nextText
-    if (nextTextNodeId <= 0){
+    if (nextTextNodeId <= 0) {
         return startGame()
     }
     state = Object.assign(state, option.setState)
     showTextNode(nextTextNodeId)
 }
 
-const textNodes = [
-    {
+const textNodes = [{
         id: 1,
         text: 'You wake up in a strange place and you see a jar of blue goo near you',
-        options: [
-            {
+        options: [{
                 text: 'Take goo',
                 setState: { blueGoo: true },
                 nextText: 2
@@ -58,8 +68,7 @@ const textNodes = [
     {
         id: 2,
         text: 'You venture forth in search of answers to where you are when you encounter a merchant',
-        options: [
-            {
+        options: [{
                 text: 'Trade the goo for a sword',
                 requiredState: (currentState) => currentState.blueGoo,
                 setState: { blueGoo: false, sword: true },
@@ -80,8 +89,7 @@ const textNodes = [
     {
         id: 3,
         text: 'After leaving the merchant you start to feel tired and stumble upon a small town next to a dangerous looking castle.',
-        options: [
-            {
+        options: [{
                 text: 'Explore the castle',
                 nextText: 4
             },
@@ -98,12 +106,10 @@ const textNodes = [
     {
         id: 4,
         text: 'You are so tired that you fall asleep while exploring the castle, and are brutally slain by some terrible monster in you sleep',
-        options: [
-            {
-                text: 'Restart Game',
-                nextText: -1
-            }
-        ]
+        options: [{
+            text: 'Restart Game',
+            nextText: -1
+        }]
     }
 ]
 

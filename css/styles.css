@@ -37,6 +37,10 @@
         text-shadow: 2px 2px black;
     }
     
+    body section #login-button {
+        margin-top: 10px;
+    }
+    
     .container {
         margin: auto;
         width: 600px;
@@ -77,11 +81,11 @@
         color: teal;
     }
     
-    #login .container {
+    #login-section .container {
         justify-content: space-between;
     }
     
-    #login label {
+    #login-section label {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -91,13 +95,13 @@
         margin-bottom: 5px;
     }
     
-    #login input {
+    #login-section input {
         height: 20px;
         flex: 0 0 175px;
         margin-left: 20px;
     }
     
-    #login .container #submit {
+    #login-section .container #submit {
         float: right;
         border: 1 solid;
         padding: 5px;
