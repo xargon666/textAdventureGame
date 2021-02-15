@@ -1,15 +1,5 @@
 const textElement = document.getElementById('text');
 const optionButtonsElement = document.getElementById('option-buttons');
-const loginButton = document.getElementById('login-button');
-const submitButton = document.getElementById('submit-button');
-
-loginButton.onclick = function() {
-    location.href = "login.html";
-};
-
-submitButton.onclick = function() {
-    location.href = "game.html";
-};
 
 // GAME DATA
 let state = {}
