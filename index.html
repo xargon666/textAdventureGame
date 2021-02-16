@@ -6,23 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Star Mystery | WELCOME</title>
-    <script defer src="scripts/index.js"></script>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script defer src="./scripts/index.js"></script>
 </head>
 
 <body>
+    <div id="particles-js"></div>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS.load("particles-js", "./assets/particles.json", function() {
+            console.log("particles.json loaded...")
+        })
+    </script>
+
     <header>
         <h1>Star Mystery</h1>
     </header>
+
     <section id="blurb">
         <p>Login to game interface</p>
     </section>
+
     <section id="menu-buttons">
         <button class="btn" id="login-button">LOGIN</button>
     </section>
+
     <footer>
         <p>Developed from Tutorial by </p><a href="https://youtu.be/R1S_NhKkvGA">Web Dev Simplified</a>
     </footer>
+
 </body>
 
 </html>

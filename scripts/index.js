@@ -1,4 +1,4 @@
-const submitButton = document.getElementById('submit-button');
-submitButton.onclick = function() {
-    location.href = "game.html";
+const loginButton = document.getElementById('login-button');
+loginButton.onclick = function() {
+    location.href = "./login.html";
 };

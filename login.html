@@ -6,11 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Star Mystery | LOGIN</title>
-    <script defer src="scripts/login.js"></script>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script defer src="./scripts/login.js"></script>
 </head>
 
 <body>
+    <div id="particles-js"></div>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS.load("particles-js", "./assets/particles.json", function() {
+            console.log("particles.json loaded...")
+        })
+    </script>
     <section id="login-section">
         <div class="container">
             <form>
@@ -18,14 +25,13 @@
                     eNTER nAME: <input type="text" id="user-name" />
                 </label>
                 <label>
-                    eNTER eMail:<input type="email" id="email" />
+                    eNTER eMail: <input type="email" id="email" />
                 </label>
-                <button class="btn" id="submit-button">sUBMIT</button>
-            </form>
+                <button class="btn" id="go-button">eNGAGE</button>
+                <a href="./game.html">TEST</a> </form>
         </div>
     </section>
     <footer>
-        <p>~</p>
     </footer>
 </body>
 

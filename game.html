@@ -6,16 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Star Mystery | GAME</title>
-    <script defer src="scripts/game.js"></script>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script defer src="./scripts/game.js"></script>
 </head>
 
 <body>
+    <div id="particles-js"></div>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS.load("particles-js", "./assets/particles.json", function() {
+            console.log("particles.json loaded...")
+        })
+    </script>
+
     <header>
     </header>
-    <section>
+    <section id="text-message">
         <div class="container">
             <div id="text">Text</div>
+        </div>
+    </section>
+    <section>
+        <div class="container">
             <div id="option-buttons" class="btn-grid">
                 <button class="btn">Option 1</button>
                 <button class="btn">Option 2</button>
@@ -25,7 +37,6 @@
         </div>
     </section>
     <footer>
-        <p>~</p>
     </footer>
 </body>
 
