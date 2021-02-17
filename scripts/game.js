@@ -1,5 +1,24 @@
 const textElement = document.getElementById('text');
+const imgElement = document.getElementById('room-image');
 const optionButtonsElement = document.getElementById('option-buttons');
+let textArrayIteration = 1
+const roomImages = [{
+        imgIndex: 1,
+        imgURL: "./img/1.png"
+    },
+    {
+        imgIndex: 2,
+        imgURL: "./img/2.png"
+    },
+    {
+        imgIndex: 3,
+        imgURL: "./img/3.png"
+    },
+    {
+        imgIndex: 4,
+        imgURL: "./img/4.png"
+    }
+]
 
 // GAME DATA
 let state = {}
@@ -11,7 +30,12 @@ function startGame() {
 
 function showTextNode(textNodeIndex) {
     const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
+
     textElement.innerText = textNode.text
+
+    const roomImage = roomImages.find(roomImage => roomImage.imgIndex === textNode.room_id)
+    imgElement.src = roomImage.imgURL
+
     while (optionButtonsElement.firstChild) {
         optionButtonsElement.removeChild(optionButtonsElement.firstChild)
     }
@@ -43,20 +67,33 @@ function selectOption(option) {
 
 const textNodes = [{
         id: 1,
-        text: 'You wake up in a strange place and you see a jar of blue goo near you',
+        room_id: 1,
+        text: 'You have awoken into gritty, gravelly conciousness.\n\n Blissful slumber has been ripped bleeding from your skull like rotten teeth, without anestheia, by the shrill bleeting of your infernal alarm.',
         options: [{
-                text: 'Take goo',
-                setState: { blueGoo: true },
+                text: 'Get up',
+                setState: { inBed: false, alarm: true },
                 nextText: 2
             },
             {
-                text: 'Leave the goo',
-                nextText: 2
+                text: 'Switch Off Alarm',
+                setState: { inBed: false, alarm: true },
+                nextText: 3
+            },
+            {
+                text: 'Look around',
+                setState: { inBed: false, alarm: true },
+                nextText: 4
+            },
+            {
+                text: 'Stay in bed',
+                setState: { inBed: true, alarm: true },
+                nextText: 5
             }
         ]
     },
     {
         id: 2,
+        room_id: 1,
         text: 'You venture forth in search of answers to where you are when you encounter a merchant',
         options: [{
                 text: 'Trade the goo for a sword',
@@ -78,7 +115,8 @@ const textNodes = [{
     },
     {
         id: 3,
-        text: 'After leaving the merchant you start to feel tired and stumble upon a small town next to a dangerous looking castle.',
+        room_id: 3,
+        text: 'You stay in bed acheiving nothing but conserving calories. The alarm continues to brutally pound the back of your eyes.',
         options: [{
                 text: 'Explore the castle',
                 nextText: 4
@@ -95,6 +133,7 @@ const textNodes = [{
     },
     {
         id: 4,
+        room_id: 4,
         text: 'You are so tired that you fall asleep while exploring the castle, and are brutally slain by some terrible monster in you sleep',
         options: [{
             text: 'Restart Game',

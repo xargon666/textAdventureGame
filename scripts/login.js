@@ -1,4 +1,1 @@
-const goButton = document.getElementById('go-button');
-goButton.onclick = function() {
-    location.href = "./game.html";
-};
+document.getElementById('go-button').onclick = () => window.location.href = "./game.html";
