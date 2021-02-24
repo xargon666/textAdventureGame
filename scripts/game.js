@@ -1,7 +1,7 @@
 const textElement = document.getElementById('text');
 const imgElement = document.getElementById('room-image');
 const optionButtonsElement = document.getElementById('option-buttons');
-let textArrayIteration = 1
+
 const roomImages = [{
         imgIndex: 1,
         imgURL: "./img/1.png"
