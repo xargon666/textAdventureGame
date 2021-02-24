@@ -88,6 +88,11 @@ const textNodes = [{
                 text: 'Stay in bed',
                 setState: { inBed: true, alarm: true },
                 nextText: 5
+            },
+            {
+                text: 'eat penis',
+                setState: { inBed: true, alarm: true },
+                nextText: 5
             }
         ]
     },
