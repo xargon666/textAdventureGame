@@ -55,7 +55,6 @@ function showOption(option) {
     return option.requiredState == null || option.requiredState(state)
 }
 
-
 function selectOption(option) {
     const nextTextNodeId = option.nextText
     if (nextTextNodeId <= 0) {

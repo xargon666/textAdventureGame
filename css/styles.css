@@ -74,6 +74,7 @@ body .btn {
     padding: 5px 20px;
     color: var(--tealRust);
     outline: none;
+    cursor: pointer;
 }
 
 body .btn:hover {

@@ -29,7 +29,7 @@ let storyPage = 1
 let showText = ""
 
 function startGame() {
-    gameTick()
+    gameTick();
 }
 
 function gameTick() {
@@ -44,28 +44,21 @@ function gameTick() {
     if (playerMoved === true) {
         playerMoved = false
         const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
-        showText += "You have entered the " + currentRoom.name
+        showText += "You have entered the " + currentRoom.name + "."
         showText += "\n\n"
     } else {
         const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
-        showText += "You are in the " + currentRoom.name
+        showText += "You are in the " + currentRoom.name + "."
         showText += "\n\n"
     }
     // SHOW CURRENT ROOM IMAGE
     const roomImage = roomImages.find(roomImage => roomImage.imgIndex === playerLocation)
     imgElement.src = roomImage.imgURL
 
+    // UPDATE TEXT
     textElement.innerText = showText
+    populateOptions()
     console.log(progressStory)
-}
-
-function selectOption(option) {
-    const nextTextNodeId = option.nextText
-    if (nextTextNodeId <= 0) {
-        return startGame()
-    }
-    state = Object.assign(state, option.setState)
-    showTextNode(nextTextNodeId)
 }
 
 const storyBook = [{
@@ -80,54 +73,72 @@ const storyBook = [{
     }
 ]
 
-const options = [{
+const verbOptions = [{
+        id: 0,
+        text: "Move",
+    },
+    {
         id: 1,
-        text: "Go to port side Crew Cabin",
-        requiredLocation: () => { playerLocation === 2 }
+        text: "Use",
     },
     {
         id: 2,
-        text: "Go to Hab Module",
-        requiredLocation: () => { playerLocation !== 2 }
+        text: "Get",
     },
     {
         id: 3,
-        text: "Go to Starboard side Crew Cabin",
-        requiredLocation: () => { playerLocation === 2 }
-    },
-    {
-        id: 4,
-        text: "Go to Engine Room",
-        requiredLocation: () => { playerLocation === 2 }
-    },
-    {
-        id: 5,
-        text: "Go to the Bridge",
-        requiredLocation: () => { playerLocation === 2 }
+        text: "Open",
     }
 ]
 
-function populateOptions() {
-    const currentRoom = rooms.find(currentRoom => rooms.id === playerLocation)
 
+function removeButtons() {
     while (optionButtonsElement.firstChild) {
         optionButtonsElement.removeChild(optionButtonsElement.firstChild)
     }
-    options.forEach(option => {
-        const button = document.createElement('button')
-        button.innerText = option.text
-        button.classList.add('btn')
-        button.addEventListener('click', () => selectOption(option))
-        optionButtonsElement.appendChild(button)
+}
+
+function populateOptions() {
+
+    removeButtons()
+    verbOptions.forEach(option => {
+        const button = document.createElement('button');
+        button.innerText = option.text;
+        button.classList.add('btn');
+        button.addEventListener('click', () => selectVerbOption(option));
+        optionButtonsElement.appendChild(button);
     })
 }
 
-function showOption(option) {
-
-    if (currentRoom.adjacent === false) {
-        return
+function selectVerbOption(option) {
+    removeButtons();
+    const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
+    switch (option.id) {
+        case 0: // MOVE
+            console.log(option.id)
+            console.log(currentRoom.id)
+                // HOW TO CYCLE THROUGH ARRAY AND POPULATE ROOM NAMES FROM ROOMS.ADJACENT ARRAY????
+                /*.forEach(index) {
+                                button.innerText = currentRoom.name;
+                            }
+                            for (i = 0; currentRoom.adjacent.length; i++) {
+                                const button = document.createElement('button')
+                                button.innerText = rooms. 
+                            }*/
+            break
+        case 1: // USE
+            console.log(option.id)
+            break
+        case 2: // GET
+            console.log(option.id)
+            break
+        case 3: // OPEN
+            console.log(option.id)
+            break
     }
 }
+
+
 
 // function showTextNode(textNodeIndex) {
 //     const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
@@ -228,7 +239,11 @@ class item {
 };
 
 const worldItems = [
-    raggedCoat = new item("Ragged Coat", 1, 1, "You have owned the coat for many years. It smells faintly of home, and your arm pits.")
+    raggedCoat = new item(
+        "Ragged Coat",
+        1,
+        1,
+        "You have owned the coat for many years. It smells faintly of home, and your arm pits.")
 ];
 
 // const player = [{
@@ -236,5 +251,4 @@ const worldItems = [
 //     email = loginEmail;
 // }]
 
-
-startGame()
+startGame();
