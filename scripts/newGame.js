@@ -3,19 +3,23 @@ const imgElement = document.getElementById('room-image');
 const optionButtonsElement = document.getElementById('option-buttons');
 const roomImages = [{
         imgIndex: 1,
-        imgURL: "./img/1.png"
+        imgURL: "./img/SHIP_CREW1.svg"
     },
     {
         imgIndex: 2,
-        imgURL: "./img/2.png"
+        imgURL: "./img/SHIP_HUB.svg"
     },
     {
         imgIndex: 3,
-        imgURL: "./img/3.png"
+        imgURL: "./img/SHIP_CREW2.svg"
     },
     {
         imgIndex: 4,
-        imgURL: "./img/4.png"
+        imgURL: "./img/SHIP_ENGINE.svg"
+    },
+    {
+        imgIndex: 5,
+        imgURL: "./img/SHIP_BRIDGE.svg"
     }
 ]
 
@@ -24,7 +28,7 @@ let state = {}
 let textArrayIteration = 1
 let progressStory = true
 let playerMoved = false
-let playerLocation = 1
+let playerLocation = 2
 let storyPage = 1
 let showText = ""
 
@@ -57,7 +61,8 @@ function gameTick() {
 
     // UPDATE TEXT
     textElement.innerText = showText
-    populateOptions()
+    showText = ""
+    populateVerbOptions()
     console.log(progressStory)
 }
 
@@ -98,14 +103,13 @@ function removeButtons() {
     }
 }
 
-function populateOptions() {
-
+function populateVerbOptions() {
     removeButtons()
     verbOptions.forEach(option => {
         const button = document.createElement('button');
         button.innerText = option.text;
         button.classList.add('btn');
-        button.addEventListener('click', () => selectVerbOption(option));
+        button.addEventListener('click', () => selectVerbOption(option)); // possible issue here
         optionButtonsElement.appendChild(button);
     })
 }
@@ -115,17 +119,17 @@ function selectVerbOption(option) {
     const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
     switch (option.id) {
         case 0: // MOVE
-            console.log(option.id)
-            console.log(currentRoom.id)
+            removeButtons()
                 // HOW TO CYCLE THROUGH ARRAY AND POPULATE ROOM NAMES FROM ROOMS.ADJACENT ARRAY????
-                /*.forEach(index) {
-                                button.innerText = currentRoom.name;
-                            }
-                            for (i = 0; currentRoom.adjacent.length; i++) {
-                                const button = document.createElement('button')
-                                button.innerText = rooms. 
-                            }*/
-            break
+            currentRoom.adjacent.forEach(index => { // cycle through array
+                const nextRoom = rooms.find(nextRoom => nextRoom.id === index);
+                const button = document.createElement('button');
+                button.innerText = "Go to the " + nextRoom.name;
+                button.classList.add('btn');
+                button.addEventListener('click', () => selectMoveOption(index));
+                optionButtonsElement.appendChild(button);
+            })
+            backOption()
         case 1: // USE
             console.log(option.id)
             break
@@ -138,7 +142,19 @@ function selectVerbOption(option) {
     }
 }
 
+function backOption() {
+    const button = document.createElement('button');
+    button.innerText = "Back";
+    button.classList.add('btn');
+    button.addEventListener('click', () => populateVerbOptions());
+    optionButtonsElement.appendChild(button)
+}
 
+function selectMoveOption(index) {
+    playerLocation = index
+    playerMoved = true
+    gameTick()
+}
 
 // function showTextNode(textNodeIndex) {
 //     const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
