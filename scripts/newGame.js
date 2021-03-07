@@ -129,16 +129,20 @@ function selectVerbOption(option) {
                 button.addEventListener('click', () => selectMoveOption(index));
                 optionButtonsElement.appendChild(button);
             })
-            backOption()
+            backOption();
+            break;
         case 1: // USE
-            console.log(option.id)
-            break
+            console.log(option.id);
+            break;
         case 2: // GET
-            console.log(option.id)
-            break
+            console.log(option.id);
+            break;
         case 3: // OPEN
-            console.log(option.id)
-            break
+            console.log(option.id);
+            break;
+        default:
+            populateVerbOptions();
+            break;
     }
 }
 
