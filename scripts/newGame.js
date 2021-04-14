@@ -1,6 +1,8 @@
 const textElement = document.getElementById('text');
 const imgElement = document.getElementById('room-image');
 const optionButtonsElement = document.getElementById('option-buttons');
+
+
 const roomImages = [{
         imgIndex: 1,
         imgURL: "./img/SHIP_CREW1.svg"
@@ -88,7 +90,7 @@ const verbOptions = [{
     },
     {
         id: 2,
-        text: "Get",
+        text: "Pick up",
     },
     {
         id: 3,
@@ -96,6 +98,13 @@ const verbOptions = [{
     }
 ]
 
+function createButtons(textValue, clickEvent) {
+    const button = document.createElement('button');
+    button.innerText = textValue;
+    button.classList.add('btn');
+    button.addEventListener('click', () => clickEvent);
+    optionButtonsElement.appendChild(button)
+}
 
 function removeButtons() {
     while (optionButtonsElement.firstChild) {
@@ -106,11 +115,7 @@ function removeButtons() {
 function populateVerbOptions() {
     removeButtons()
     verbOptions.forEach(option => {
-        const button = document.createElement('button');
-        button.innerText = option.text;
-        button.classList.add('btn');
-        button.addEventListener('click', () => selectVerbOption(option)); // possible issue here
-        optionButtonsElement.appendChild(button);
+        createButtons(option.text, selectVerbOption(option));
     })
 }
 
@@ -123,20 +128,20 @@ function selectVerbOption(option) {
                 // HOW TO CYCLE THROUGH ARRAY AND POPULATE ROOM NAMES FROM ROOMS.ADJACENT ARRAY????
             currentRoom.adjacent.forEach(index => { // cycle through array
                 const nextRoom = rooms.find(nextRoom => nextRoom.id === index);
-                const button = document.createElement('button');
-                button.innerText = "Go to the " + nextRoom.name;
-                button.classList.add('btn');
-                button.addEventListener('click', () => selectMoveOption(index));
-                optionButtonsElement.appendChild(button);
+                createButtons(nextRoom.name, selectMoveOption(index));
             })
             backOption();
             break;
         case 1: // USE
             console.log(option.id);
             break;
-        case 2: // GET
-            console.log(option.id);
-            break;
+        case 2: // PICK UP
+            removeButtons()
+            items = currentRoom.objects.forEach(object => {
+                if (object.pickup) {
+                    createButtons(object.name, pickupItem())
+                };
+            });
         case 3: // OPEN
             console.log(option.id);
             break;
@@ -176,72 +181,92 @@ function selectMoveOption(index) {
 //     })
 // }
 
-const rooms = [{
+let rooms = [{
+    id: 1,
+    name: "port side Crew Cabin",
+    description: "A small cabin clad with panels and blinking lights, but no windows. There is a door, but no windows.",
+    adjacent: [2],
+    objects: [{
         id: 1,
-        name: "port side Crew Cabin",
-        description: "The room is a small sleeping cabin, with no windows, and no taste.",
-        adjacent: [2],
-        states: {
-            locked: false,
-            visited: false,
-            light: false,
-            fire: false,
-            oxygen: true
-        }
-    },
-    {
+        name: "bed",
+        pickup: false,
+        use: "You do not feel tired."
+    }, {
         id: 2,
-        name: "Hab Module",
-        description: "The room is the general living area. There are several 'seats' and Utility cabinets line the walls.",
-        adjacent: [1, 3, 4, 5],
-        states: {
-            locked: false,
-            visited: false,
-            light: true,
-            fire: false,
-            oxygen: true
-        }
-    },
-    {
+        name: "door",
+        pickup: false,
+        use: boolOpen === true ? "the door is open." : "the door is closed.",
+        boolOpen: false
+    }, {
         id: 3,
-        name: "starboard side Crew Cabin",
-        description: "The room is filled with steaming computer panels and blinking pipes.",
-        adjacent: [2],
-        states: {
-            locked: true,
-            visited: false,
-            light: true,
-            fire: false,
-            oxygen: true
-        }
-    },
-    {
+        name: "alarm",
+        pickup: false,
+        use: boolUse === true ? "you switch off the alarm." : "the alarm is already off.",
+        boolUse: false
+    }, {
         id: 4,
-        name: "Engine Room",
-        description: "The room is filled with steaming computer panels and blinking pipes.",
-        adjacent: [2],
-        states: {
-            locked: true,
-            visited: false,
-            light: true,
-            fire: false,
-            oxygen: true
-        }
-    },
-    {
-        id: 5,
-        name: "Bridge",
-        description: "The room is filled with steaming computer panels and blinking pipes.",
-        adjacent: [2],
-        states: {
-            locked: true,
-            visited: false,
-            light: true,
-            fire: false,
-            oxygen: true
-        }
+        name: "rock",
+        pickup: true,
+        use: "You pickup the rock."
+    }, {
+
+    }],
+    states: {
+        locked: false,
+        visited: false,
+        light: false,
+        fire: false,
+        oxygen: true
     }
-]
+}, {
+    id: 2,
+    name: "Hab Module",
+    description: "The room is the general living area. There are several 'seats' and Utility cabinets line the walls.",
+    adjacent: [1, 3, 4, 5],
+    states: {
+        locked: false,
+        visited: false,
+        light: true,
+        fire: false,
+        oxygen: true
+    }
+}, {
+    id: 3,
+    name: "starboard side Crew Cabin",
+    description: "The room is filled with steaming computer panels and blinking pipes.",
+    adjacent: [2],
+    states: {
+        locked: true,
+        visited: false,
+        light: true,
+        fire: false,
+        oxygen: true
+    }
+}, {
+    id: 4,
+    name: "Engine Room",
+    description: "The room is filled with steaming computer panels and blinking pipes.",
+    adjacent: [2],
+    states: {
+        locked: true,
+        visited: false,
+        light: true,
+        fire: false,
+        oxygen: true
+    }
+}, {
+    id: 5,
+    name: "Bridge",
+    description: "The room is filled with steaming computer panels and blinking pipes.",
+    adjacent: [2],
+    states: {
+        locked: true,
+        visited: false,
+        light: true,
+        fire: false,
+        oxygen: true
+    }
+}]
 
 // Item States
 // 0: is out-of-play (destroyed or not yet introduced)
