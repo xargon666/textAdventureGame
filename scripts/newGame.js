@@ -49,11 +49,13 @@ function gameTick() {
     }
     // CHECK IF PLAYER HAS MOVED TO A NEW ROOM
     if (playerMoved === true) {
+        console.log("Player moves...")
         playerMoved = false
         const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
         showText += "You have entered the " + currentRoom.name + "."
         showText += "\n\n"
     } else {
+        console.log("Player Stands...")
         const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
         showText += "You are in the " + currentRoom.name + "."
         showText += "\n\n"
@@ -104,7 +106,7 @@ function createButton(textValue, clickEvent) { // PASSING FUNCTION THROUGH TO EV
     const button = document.createElement('button');
     button.innerText = textValue;
     button.classList.add('btn');
-    button.addEventListener('click', () => clickEvent);
+    button.addEventListener('click', () => clickEvent());
     optionButtonsElement.appendChild(button)
 }
 
@@ -115,6 +117,7 @@ function removeButtons() {
 }
 
 function populateVerbOptions() {
+    console.log("POPULATE_VERB_OPTIONS")
     removeButtons()
     verbOptions.forEach(option => {
         createButton(option.text, selectVerbOption(option));
@@ -126,10 +129,9 @@ function selectVerbOption(option) {
     const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
     switch (option.id) {
         case 0: // MOVE
-            removeButtons()
-                // HOW TO CYCLE THROUGH ARRAY AND POPULATE ROOM NAMES FROM ROOMS.ADJACENT ARRAY????
+            // HOW TO CYCLE THROUGH ARRAY AND POPULATE ROOM NAMES FROM ROOMS.ADJACENT ARRAY????
             currentRoom.adjacent.forEach(index => { // cycle through array
-                console.log("MOVE - CURRENTROOM")
+                console.log("MOVE_TO_ADJACENT_ROOM")
                 const nextRoom = rooms.find(nextRoom => nextRoom.id === index);
                 createButton(nextRoom.name, selectMoveOption(index));
             })
@@ -137,16 +139,19 @@ function selectVerbOption(option) {
             break;
         case 1: // USE
             console.log(option.id);
+            backOption();
             break;
         case 2: // PICK UP
-            removeButtons()
             items = currentRoom.objects.forEach(object => {
                 if (object.pickup) {
                     createButton(object.name, pickupItem())
                 };
             });
+            backOption();
+            break;
         case 3: // OPEN
             console.log(option.id);
+            backOption();
             break;
     }
 }
@@ -163,7 +168,7 @@ function selectMoveOption(index) {
     console.log("SELECT_MOVE_OPTION")
     playerLocation = index
     playerMoved = true
-    gameTick()
+        //gameTick()
 }
 
 // function showTextNode(textNodeIndex) {
