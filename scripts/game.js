@@ -2,6 +2,7 @@ const textElement = document.getElementById('text');
 const imgElement = document.getElementById('room-image');
 const optionButtonsElement = document.getElementById('option-buttons');
 
+
 const roomImages = [{
         imgIndex: 1,
         imgURL: "./img/1.png"
@@ -111,7 +112,7 @@ const textNodes = [{
                 setState: { blueGoo: false, shield: true },
                 nextText: 3
             },
-            {
+            {¬¬¬
                 text: 'Ignore Merchant',
                 nextText: 3
             }

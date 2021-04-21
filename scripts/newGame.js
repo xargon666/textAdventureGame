@@ -41,6 +41,7 @@ function startGame() {
 function gameTick() {
     // CHECK IF STORY HAS PROGRESSED
     if (progressStory === true) {
+        console.log("Story continues...")
         const newText = storyBook.find(newText => newText.id === storyPage)
         showText += newText.text
         showText += "\n\n"
@@ -98,7 +99,8 @@ const verbOptions = [{
     }
 ]
 
-function createButtons(textValue, clickEvent) {
+function createButton(textValue, clickEvent) { // PASSING FUNCTION THROUGH TO EVENT LISTENER?
+    console.log("CREATE_BUTTON")
     const button = document.createElement('button');
     button.innerText = textValue;
     button.classList.add('btn');
@@ -115,20 +117,21 @@ function removeButtons() {
 function populateVerbOptions() {
     removeButtons()
     verbOptions.forEach(option => {
-        createButtons(option.text, selectVerbOption(option));
+        createButton(option.text, selectVerbOption(option));
     })
 }
 
 function selectVerbOption(option) {
-    removeButtons();
+    console.log("SELECT_VERB_OPTION")
     const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
     switch (option.id) {
         case 0: // MOVE
             removeButtons()
                 // HOW TO CYCLE THROUGH ARRAY AND POPULATE ROOM NAMES FROM ROOMS.ADJACENT ARRAY????
             currentRoom.adjacent.forEach(index => { // cycle through array
+                console.log("MOVE - CURRENTROOM")
                 const nextRoom = rooms.find(nextRoom => nextRoom.id === index);
-                createButtons(nextRoom.name, selectMoveOption(index));
+                createButton(nextRoom.name, selectMoveOption(index));
             })
             backOption();
             break;
@@ -139,14 +142,11 @@ function selectVerbOption(option) {
             removeButtons()
             items = currentRoom.objects.forEach(object => {
                 if (object.pickup) {
-                    createButtons(object.name, pickupItem())
+                    createButton(object.name, pickupItem())
                 };
             });
         case 3: // OPEN
             console.log(option.id);
-            break;
-        default:
-            populateVerbOptions();
             break;
     }
 }
@@ -160,6 +160,7 @@ function backOption() {
 }
 
 function selectMoveOption(index) {
+    console.log("SELECT_MOVE_OPTION")
     playerLocation = index
     playerMoved = true
     gameTick()
@@ -182,91 +183,101 @@ function selectMoveOption(index) {
 // }
 
 let rooms = [{
-    id: 1,
-    name: "port side Crew Cabin",
-    description: "A small cabin clad with panels and blinking lights, but no windows. There is a door, but no windows.",
-    adjacent: [2],
-    objects: [{
         id: 1,
-        name: "bed",
-        pickup: false,
-        use: "You do not feel tired."
-    }, {
+        name: "port side Crew Cabin",
+        description: "A small cabin clad with panels and blinking lights, but no windows. There is a door, but no windows.",
+        adjacent: [2],
+        objects: [{
+                id: 1,
+                name: "bed",
+                pickup: false,
+                use: "You do not feel tired."
+            }, {
+                id: 2,
+                name: "door",
+                pickup: false,
+                boolOpen: false,
+                use: function() {
+                    return boolOpen ? "the door is open." : "the door is closed."
+                },
+            },
+            {
+                id: 3,
+                name: "alarm",
+                pickup: false,
+                boolUse: false,
+                use: function() {
+                    return boolUse === true ? "you switch off the alarm." : "the alarm is already off."
+                },
+            },
+            {
+                id: 4,
+                name: "rock",
+                pickup: true,
+                use: "You pickup the rock."
+            },
+            {
+
+            }
+        ],
+        states: {
+            locked: false,
+            visited: false,
+            light: false,
+            fire: false,
+            oxygen: true
+        }
+    },
+    {
         id: 2,
-        name: "door",
-        pickup: false,
-        use: boolOpen === true ? "the door is open." : "the door is closed.",
-        boolOpen: false
+        name: "Hab Module",
+        description: "The room is the general living area. There are several 'seats' and Utility cabinets line the walls.",
+        adjacent: [1, 3, 4, 5],
+        states: {
+            locked: false,
+            visited: false,
+            light: true,
+            fire: false,
+            oxygen: true
+        }
     }, {
         id: 3,
-        name: "alarm",
-        pickup: false,
-        use: boolUse === true ? "you switch off the alarm." : "the alarm is already off.",
-        boolUse: false
+        name: "starboard side Crew Cabin",
+        description: "The room is filled with steaming computer panels and blinking pipes.",
+        adjacent: [2],
+        states: {
+            locked: true,
+            visited: false,
+            light: true,
+            fire: false,
+            oxygen: true
+        }
     }, {
         id: 4,
-        name: "rock",
-        pickup: true,
-        use: "You pickup the rock."
+        name: "Engine Room",
+        description: "The room is filled with steaming computer panels and blinking pipes.",
+        adjacent: [2],
+        states: {
+            locked: true,
+            visited: false,
+            light: true,
+            fire: false,
+            oxygen: true
+        }
     }, {
-
-    }],
-    states: {
-        locked: false,
-        visited: false,
-        light: false,
-        fire: false,
-        oxygen: true
+        id: 5,
+        name: "Bridge",
+        description: "The room is filled with steaming computer panels and blinking pipes.",
+        adjacent: [2],
+        states: {
+            locked: true,
+            visited: false,
+            light: true,
+            fire: false,
+            oxygen: true
+        }
     }
-}, {
-    id: 2,
-    name: "Hab Module",
-    description: "The room is the general living area. There are several 'seats' and Utility cabinets line the walls.",
-    adjacent: [1, 3, 4, 5],
-    states: {
-        locked: false,
-        visited: false,
-        light: true,
-        fire: false,
-        oxygen: true
-    }
-}, {
-    id: 3,
-    name: "starboard side Crew Cabin",
-    description: "The room is filled with steaming computer panels and blinking pipes.",
-    adjacent: [2],
-    states: {
-        locked: true,
-        visited: false,
-        light: true,
-        fire: false,
-        oxygen: true
-    }
-}, {
-    id: 4,
-    name: "Engine Room",
-    description: "The room is filled with steaming computer panels and blinking pipes.",
-    adjacent: [2],
-    states: {
-        locked: true,
-        visited: false,
-        light: true,
-        fire: false,
-        oxygen: true
-    }
-}, {
-    id: 5,
-    name: "Bridge",
-    description: "The room is filled with steaming computer panels and blinking pipes.",
-    adjacent: [2],
-    states: {
-        locked: true,
-        visited: false,
-        light: true,
-        fire: false,
-        oxygen: true
-    }
-}]
+]
 
 // Item States
 // 0: is out-of-play (destroyed or not yet introduced)
@@ -274,22 +285,22 @@ let rooms = [{
 // 2: has been handled by the player e.g. taken and then dropped
 // 3: is carried by the player.
 
-class item {
-    constructor(name, state, location, description) {
-        this.name = name;
-        this.state = state;
-        this.location = location;
-        this.description = description;
-    }
-};
+// class item {
+//     constructor(name, state, location, description) {
+//         this.name = name;
+//         this.state = state;
+//         this.location = location;
+//         this.description = description;
+//     }
+// };
 
-const worldItems = [
-    raggedCoat = new item(
-        "Ragged Coat",
-        1,
-        1,
-        "You have owned the coat for many years. It smells faintly of home, and your arm pits.")
-];
+// const worldItems = [
+//     raggedCoat = new item(
+//         "Ragged Coat",
+//         1,
+//         1,
+//         "You have owned the coat for many years. It smells faintly of home, and your arm pits.")
+// ];
 
 // const player = [{
 //     name = loginName;
