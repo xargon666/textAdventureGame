@@ -2,7 +2,6 @@ const textElement = document.getElementById('text');
 const imgElement = document.getElementById('room-image');
 const optionButtonsElement = document.getElementById('option-buttons');
 
-
 const roomImages = [{
         imgIndex: 1,
         imgURL: "./img/SHIP_CREW1.svg"
@@ -33,6 +32,7 @@ let playerMoved = false
 let playerLocation = 2
 let storyPage = 1
 let showText = ""
+let playerItems = []
 
 function startGame() {
     gameTick();
@@ -102,11 +102,12 @@ const verbOptions = [{
 ]
 
 function createButton(textValue, clickEvent) { // PASSING FUNCTION THROUGH TO EVENT LISTENER?
-    console.log("CREATE_BUTTON")
+    console.log("CREATE_BUTTON: " + textValue)
+    console.log(typeof clickEvent)
     const button = document.createElement('button');
     button.innerText = textValue;
     button.classList.add('btn');
-    button.addEventListener('click', () => clickEvent());
+    button.addEventListener('click', clickEvent);
     optionButtonsElement.appendChild(button)
 }
 
@@ -120,20 +121,22 @@ function populateVerbOptions() {
     console.log("POPULATE_VERB_OPTIONS")
     removeButtons()
     verbOptions.forEach(option => {
-        createButton(option.text, selectVerbOption(option));
+        return createButton(option.text, () => selectVerbOption(option));
     })
 }
 
 function selectVerbOption(option) {
+    removeButtons()
     console.log("SELECT_VERB_OPTION")
     const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
+    console.log("Current Room: " + currentRoom.name)
     switch (option.id) {
         case 0: // MOVE
             // HOW TO CYCLE THROUGH ARRAY AND POPULATE ROOM NAMES FROM ROOMS.ADJACENT ARRAY????
             currentRoom.adjacent.forEach(index => { // cycle through array
                 console.log("MOVE_TO_ADJACENT_ROOM")
                 const nextRoom = rooms.find(nextRoom => nextRoom.id === index);
-                createButton(nextRoom.name, selectMoveOption(index));
+                createButton(nextRoom.name, () => selectMoveOption(index));
             })
             backOption();
             break;
@@ -142,9 +145,10 @@ function selectVerbOption(option) {
             backOption();
             break;
         case 2: // PICK UP
-            items = currentRoom.objects.forEach(object => {
+            console.log(currentRoom.objects)
+            currentRoom.objects && currentRoom.objects.forEach(object => {
                 if (object.pickup) {
-                    createButton(object.name, pickupItem())
+                    createButton(object.name, () => pickupObject(object.id))
                 };
             });
             backOption();
@@ -154,6 +158,10 @@ function selectVerbOption(option) {
             backOption();
             break;
     }
+}
+
+function pickupObject(index) {
+
 }
 
 function backOption() {
@@ -168,7 +176,7 @@ function selectMoveOption(index) {
     console.log("SELECT_MOVE_OPTION")
     playerLocation = index
     playerMoved = true
-        //gameTick()
+    gameTick()
 }
 
 // function showTextNode(textNodeIndex) {
@@ -192,27 +200,35 @@ let rooms = [{
         name: "port side Crew Cabin",
         description: "A small cabin clad with panels and blinking lights, but no windows. There is a door, but no windows.",
         adjacent: [2],
+        states: {
+            locked: false,
+            visited: false,
+            light: false,
+            fire: false,
+            oxygen: true
+        },
         objects: [{
                 id: 1,
-                name: "bed",
-                pickup: false,
-                use: "You do not feel tired."
-            }, {
-                id: 2,
                 name: "door",
                 pickup: false,
+                use: () => {
+                    boolOpen ? "the door is open." : "the door is closed."
+                }
+            },
+            {
+                id: 2,
+                name: "bed",
+                pickup: false,
                 boolOpen: false,
-                use: function() {
-                    return boolOpen ? "the door is open." : "the door is closed."
-                },
+                use: "You do not feel tired."
             },
             {
                 id: 3,
                 name: "alarm",
                 pickup: false,
                 boolUse: false,
-                use: function() {
-                    return boolUse === true ? "you switch off the alarm." : "the alarm is already off."
+                use: () => {
+                    boolUse === true ? "you switch off the alarm." : "the alarm is already off."
                 },
             },
             {
@@ -224,14 +240,7 @@ let rooms = [{
             {
 
             }
-        ],
-        states: {
-            locked: false,
-            visited: false,
-            light: false,
-            fire: false,
-            oxygen: true
-        }
+        ]
     },
     {
         id: 2,
@@ -244,8 +253,24 @@ let rooms = [{
             light: true,
             fire: false,
             oxygen: true
-        }
-    }, {
+        },
+        objects: [{
+                id: 1,
+                name: "door",
+                pickup: false,
+                use: () => {
+                    boolOpen ? "the door is open." : "the door is closed."
+                }
+            },
+            {
+                id: 2,
+                name: "rock",
+                pickup: true,
+                use: "You pickup the rock."
+            }
+        ]
+    },
+    {
         id: 3,
         name: "starboard side Crew Cabin",
         description: "The room is filled with steaming computer panels and blinking pipes.",
@@ -256,7 +281,22 @@ let rooms = [{
             light: true,
             fire: false,
             oxygen: true
-        }
+        },
+        objects: [{
+                id: 1,
+                name: "door",
+                pickup: false,
+                use: () => {
+                    boolOpen ? "the door is open." : "the door is closed."
+                }
+            },
+            {
+                id: 2,
+                name: "rock",
+                pickup: true,
+                use: "You pickup the rock."
+            }
+        ]
     }, {
         id: 4,
         name: "Engine Room",
@@ -268,7 +308,22 @@ let rooms = [{
             light: true,
             fire: false,
             oxygen: true
-        }
+        },
+        objects: [{
+                id: 1,
+                name: "door",
+                pickup: false,
+                use: () => {
+                    boolOpen ? "the door is open." : "the door is closed."
+                }
+            },
+            {
+                id: 2,
+                name: "rock",
+                pickup: true,
+                use: "You pickup the rock."
+            }
+        ]
     }, {
         id: 5,
         name: "Bridge",
@@ -280,7 +335,22 @@ let rooms = [{
             light: true,
             fire: false,
             oxygen: true
-        }
+        },
+        objects: [{
+                id: 1,
+                name: "door",
+                pickup: false,
+                use: () => {
+                    boolOpen ? "the door is open." : "the door is closed."
+                }
+            },
+            {
+                id: 2,
+                name: "rock",
+                pickup: true,
+                use: "You pickup the rock."
+            }
+        ]
     }
 ]
 
