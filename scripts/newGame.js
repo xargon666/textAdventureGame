@@ -1,6 +1,13 @@
 const textElement = document.getElementById('text');
+const inventoryElement = document.getElementById('inventory-items');
 const imgElement = document.getElementById('room-image');
 const optionButtonsElement = document.getElementById('option-buttons');
+
+function play_beep() {
+    var snd = new Audio("https://www.soundjay.com/button/beep-08b.wav");
+    snd.play();
+    return false;
+}
 
 const roomImages = [{
         imgIndex: 1,
@@ -32,13 +39,14 @@ let playerMoved = false
 let playerLocation = 2
 let storyPage = 1
 let showText = ""
-let playerItems = []
+let playerItems = [];
 
 function startGame() {
     gameTick();
 }
 
 function gameTick() {
+
     // CHECK IF STORY HAS PROGRESSED
     if (progressStory === true) {
         console.log("Story continues...")
@@ -49,13 +57,13 @@ function gameTick() {
     }
     // CHECK IF PLAYER HAS MOVED TO A NEW ROOM
     if (playerMoved === true) {
-        console.log("Player moves...")
+        console.log("Player position has changed!")
         playerMoved = false
         const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
         showText += "You have entered the " + currentRoom.name + "."
         showText += "\n\n"
     } else {
-        console.log("Player Stands...")
+        console.log("Player position unchanged")
         const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
         showText += "You are in the " + currentRoom.name + "."
         showText += "\n\n"
@@ -67,8 +75,32 @@ function gameTick() {
     // UPDATE TEXT
     textElement.innerText = showText
     showText = ""
-    populateVerbOptions()
-    console.log(progressStory)
+    populateVerbOptions();
+    populateInventory();
+    console.log(progressStory);
+}
+
+function removeInventory() {
+    while (inventoryElement.firstChild) {
+        inventoryElement.removeChild(inventoryElement.firstChild)
+    }
+}
+
+function populateInventory() {
+    console.log("playerItems:");
+    console.log(playerItems);
+    if (playerItems.length < 1) {
+        removeInventory()
+    }
+    if (playerItems.length > 0) {
+        removeInventory()
+        console.log("inventoryElement")
+        playerItems.forEach(itemToAdd => {
+            const item = document.createElement('item');
+            item.innerText = itemToAdd.name;
+            inventoryElement.appendChild(item)
+        })
+    }
 }
 
 const storyBook = [{
@@ -103,7 +135,7 @@ const verbOptions = [{
 
 function createButton(textValue, clickEvent) { // PASSING FUNCTION THROUGH TO EVENT LISTENER?
     console.log("CREATE_BUTTON: " + textValue)
-    console.log(typeof clickEvent)
+    console.log(clickEvent)
     const button = document.createElement('button');
     button.innerText = textValue;
     button.classList.add('btn');
@@ -145,10 +177,12 @@ function selectVerbOption(option) {
             backOption();
             break;
         case 2: // PICK UP
+            console.log("currentRoom.objects:")
             console.log(currentRoom.objects)
             currentRoom.objects && currentRoom.objects.forEach(object => {
-                if (object.pickup) {
-                    createButton(object.name, () => pickupObject(object.id))
+                if (object.pickup && object.available) {
+                    const targetObject = object
+                    createButton(object.name, () => pickupObject(targetObject))
                 };
             });
             backOption();
@@ -160,8 +194,10 @@ function selectVerbOption(option) {
     }
 }
 
-function pickupObject(index) {
-
+function pickupObject(targetObject) {
+    targetObject.available = false;
+    playerItems.push(targetObject);
+    gameTick();
 }
 
 function backOption() {
@@ -169,14 +205,15 @@ function backOption() {
     button.innerText = "Back";
     button.classList.add('btn');
     button.addEventListener('click', () => populateVerbOptions());
-    optionButtonsElement.appendChild(button)
+    optionButtonsElement.appendChild(button);
 }
 
 function selectMoveOption(index) {
-    console.log("SELECT_MOVE_OPTION")
-    playerLocation = index
-    playerMoved = true
-    gameTick()
+    console.log("SELECT_MOVE_OPTION");
+    playerLocation = index;
+    playerMoved = true;
+    play_beep();
+    gameTick();
 }
 
 // function showTextNode(textNodeIndex) {
@@ -234,6 +271,7 @@ let rooms = [{
             {
                 id: 4,
                 name: "rock",
+                available: true,
                 pickup: true,
                 use: "You pickup the rock."
             },
@@ -265,6 +303,7 @@ let rooms = [{
             {
                 id: 2,
                 name: "rock",
+                available: true,
                 pickup: true,
                 use: "You pickup the rock."
             }
@@ -293,6 +332,7 @@ let rooms = [{
             {
                 id: 2,
                 name: "rock",
+                available: true,
                 pickup: true,
                 use: "You pickup the rock."
             }
@@ -320,6 +360,7 @@ let rooms = [{
             {
                 id: 2,
                 name: "rock",
+                available: true,
                 pickup: true,
                 use: "You pickup the rock."
             }
@@ -347,6 +388,7 @@ let rooms = [{
             {
                 id: 2,
                 name: "rock",
+                available: true,
                 pickup: true,
                 use: "You pickup the rock."
             }
