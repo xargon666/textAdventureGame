@@ -90,7 +90,7 @@ const verbOptions = [{
     },
     {
         id: 3,
-        text: "Open",
+        text: "Look at",
     }
 ]
 
@@ -361,12 +361,12 @@ function removeInventory() {
 
 function setupInventory() {
     populateInventory();
-    if (playerInventory.length < 1) {
-        hideElement(inventorySection)
-    };
-    if (playerInventory.length > 0) {
-        revealElement(inventorySection)
-    };
+    // if (playerInventory.length < 1) {
+    //     hideElement(inventorySection)
+    // };
+    // if (playerInventory.length > 0) {
+    //     revealElement(inventorySection)
+    // };
 }
 
 function populateInventory() {
@@ -417,6 +417,7 @@ gameItems: [{
 const displayTextSection = function() {
     if (showText.length < 1) {
         hideElement(textSection);
+        revealElement(inventorySection);
         return
     };
     if (showText.length > 0) {

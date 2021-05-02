@@ -28,12 +28,13 @@
 }
 
 body {
-    display: flex;
     position: static;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: auto;
+    flex-wrap: nowrap;
+    overflow: hidden;
     height: 100vh;
     width: 100vw;
     background-color: var(--darkMetal);
@@ -47,57 +48,83 @@ body header {
     text-shadow: 2px 2px black;
 }
 
-body #location-section .container {
-    padding: 0;
+body section {
+    max-width: 85vw;
+    width: 800px;
 }
 
-body #login-button {
-    margin-top: 10px;
+body article {
+    margin: 10px
 }
 
-body #image-section #room-image {
-    max-height: 25vh;
-    overflow: auto;
+body aside {
+    margin: 15px
 }
 
-section {
-    margin-bottom: 20px;
-}
-
-article {
+body nav {
     margin: 15px
 }
 
 body #top-section {
-    width: 1000px;
+    display: flex-inline;
     flex-direction: column;
-    background-color: green;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+body #main-section {
+    display: flex-inline;
+    flex-direction: column;
+    justify-content: center;
 }
 
 body #bottom-section {
-    flex: 1;
-    flex-wrap: wrap;
-    overflow: auto;
+    margin-top: 5px;
     display: flex;
     flex-direction: row;
-    background-color: red;
+    flex-wrap: wrap;
+    max-height: 200px;
+    min-height: 185px;
 }
 
-body #bottom-section #inventory-section #inventory-items {
-    flex-direction: row;
+body #bottom-section .bottom-child {
     flex: 1;
+    justify-content: center;
+}
+
+body #bottom-section #inventory-section {
+    display: flex;
+    order: -1;
+}
+
+body #bottom-section #option-buttons {
+    order: 2;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
 }
 
 body .container {
-    margin: auto;
-    max-width: 80%;
+    flex: 1;
     background-image: url("../img/metal_test.png");
     padding: 10px;
+    margin: 0px;
     border-radius: 5px;
     box-shadow: 0 0 10px 2px;
     color: var(--tealRust);
     text-shadow: 2px 2px var(--darkMetal);
     text-align: center;
+}
+
+body #location-section .container {
+    padding: 0;
+}
+
+body #image-section #room-image {
+    max-height: 25vh;
+    overflow: auto;
 }
 
 body .btn {
@@ -112,7 +139,6 @@ body .btn {
 
 body .btn-grid {
     display: grid;
-    grid-template-columns: repeat(2, auto);
     gap: 10px;
     max-height: 25vh;
 }
@@ -142,6 +168,10 @@ footer a {
 
 /* Login Stuff */
 
+body #login-button {
+    margin-top: 10px;
+}
+
 #login-section {
     justify-content: space-between;
     display: flex;
@@ -170,8 +200,4 @@ footer a {
 
 /* Media Queries */
 
-@media(max-width:568px) {
-    body section {
-        max-width: 90vw;
-    }
-}
+@media(max-width:568px) {}
