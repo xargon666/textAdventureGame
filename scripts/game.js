@@ -112,7 +112,7 @@ const textNodes = [{
                 setState: { blueGoo: false, shield: true },
                 nextText: 3
             },
-            {¬¬¬
+            {
                 text: 'Ignore Merchant',
                 nextText: 3
             }

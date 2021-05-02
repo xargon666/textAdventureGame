@@ -1,5 +1,12 @@
-const textElement = document.getElementById('text');
-const inventoryElement = document.getElementById('inventory-items');
+const textSection = document.getElementById('text-section');
+const textElement = document.getElementById('text-element');
+
+const locationSection = document.getElementById('location-section');
+const locationElement = document.getElementById('location-element');
+
+const inventorySection = document.getElementById('inventory-section');
+const inventoryItemsElement = document.getElementById('inventory-items');
+
 const imgElement = document.getElementById('room-image');
 const optionButtonsElement = document.getElementById('option-buttons');
 
@@ -31,75 +38,29 @@ const roomImages = [{
     }
 ]
 
-// GAME DATA
-let state = {}
-let textArrayIteration = 1
-let progressStory = true
-let playerMoved = false
-let playerLocation = 2
-let storyPage = 1
-let showText = ""
-let playerItems = [];
-
-function startGame() {
-    gameTick();
+function hideElement(targetElement) {
+    targetElement.style.display = "none";
+    console.log("Element hidden = " + inventorySection.id)
 }
 
-function gameTick() {
+function revealElement(targetElement) {
+    targetElement.style.display = "flex";
+    console.log("Element revealed = " + inventorySection.id)
+}
 
-    // CHECK IF STORY HAS PROGRESSED
-    if (progressStory === true) {
-        console.log("Story continues...")
-        const newText = storyBook.find(newText => newText.id === storyPage)
-        showText += newText.text
-        showText += "\n\n"
-        progressStory = false
-    }
-    // CHECK IF PLAYER HAS MOVED TO A NEW ROOM
-    if (playerMoved === true) {
-        console.log("Player position has changed!")
-        playerMoved = false
-        const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
-        showText += "You have entered the " + currentRoom.name + "."
-        showText += "\n\n"
-    } else {
+// CHECK IF PLAYER HAS MOVED TO A NEW ROOM
+function playerMovement() {
+    if (!playerMoved) {
         console.log("Player position unchanged")
         const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
-        showText += "You are in the " + currentRoom.name + "."
-        showText += "\n\n"
+        locationElement.innerText = "Location: " + currentRoom.name
     }
-    // SHOW CURRENT ROOM IMAGE
-    const roomImage = roomImages.find(roomImage => roomImage.imgIndex === playerLocation)
-    imgElement.src = roomImage.imgURL
-
-    // UPDATE TEXT
-    textElement.innerText = showText
-    showText = ""
-    populateVerbOptions();
-    populateInventory();
-    console.log(progressStory);
-}
-
-function removeInventory() {
-    while (inventoryElement.firstChild) {
-        inventoryElement.removeChild(inventoryElement.firstChild)
-    }
-}
-
-function populateInventory() {
-    console.log("playerItems:");
-    console.log(playerItems);
-    if (playerItems.length < 1) {
-        removeInventory()
-    }
-    if (playerItems.length > 0) {
-        removeInventory()
-        console.log("inventoryElement")
-        playerItems.forEach(itemToAdd => {
-            const item = document.createElement('item');
-            item.innerText = itemToAdd.name;
-            inventoryElement.appendChild(item)
-        })
+    if (playerMoved) {
+        console.log("Player position has changed!")
+        const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
+        locationElement.innerText = currentRoom.name
+        showText = "Player moved to the " + currentRoom.name
+        playerMoved = false
     }
 }
 
@@ -134,8 +95,8 @@ const verbOptions = [{
 ]
 
 function createButton(textValue, clickEvent) { // PASSING FUNCTION THROUGH TO EVENT LISTENER?
-    console.log("CREATE_BUTTON: " + textValue)
-    console.log(clickEvent)
+    //console.log("CREATE_BUTTON: " + textValue)
+    //console.log(clickEvent)
     const button = document.createElement('button');
     button.innerText = textValue;
     button.classList.add('btn');
@@ -150,7 +111,7 @@ function removeButtons() {
 }
 
 function populateVerbOptions() {
-    console.log("POPULATE_VERB_OPTIONS")
+    //console.log("POPULATE_VERB_OPTIONS")
     removeButtons()
     verbOptions.forEach(option => {
         return createButton(option.text, () => selectVerbOption(option));
@@ -159,9 +120,9 @@ function populateVerbOptions() {
 
 function selectVerbOption(option) {
     removeButtons()
-    console.log("SELECT_VERB_OPTION")
+        //console.log("SELECT_VERB_OPTION")
     const currentRoom = rooms.find(currentRoom => currentRoom.id === playerLocation)
-    console.log("Current Room: " + currentRoom.name)
+        //console.log("Current Room: " + currentRoom.name)
     switch (option.id) {
         case 0: // MOVE
             // HOW TO CYCLE THROUGH ARRAY AND POPULATE ROOM NAMES FROM ROOMS.ADJACENT ARRAY????
@@ -196,7 +157,8 @@ function selectVerbOption(option) {
 
 function pickupObject(targetObject) {
     targetObject.available = false;
-    playerItems.push(targetObject);
+    playerInventory.push(targetObject);
+    showText = "You picked up the " + targetObject.name;
     gameTick();
 }
 
@@ -244,41 +206,7 @@ let rooms = [{
             fire: false,
             oxygen: true
         },
-        objects: [{
-                id: 1,
-                name: "door",
-                pickup: false,
-                use: () => {
-                    boolOpen ? "the door is open." : "the door is closed."
-                }
-            },
-            {
-                id: 2,
-                name: "bed",
-                pickup: false,
-                boolOpen: false,
-                use: "You do not feel tired."
-            },
-            {
-                id: 3,
-                name: "alarm",
-                pickup: false,
-                boolUse: false,
-                use: () => {
-                    boolUse === true ? "you switch off the alarm." : "the alarm is already off."
-                },
-            },
-            {
-                id: 4,
-                name: "rock",
-                available: true,
-                pickup: true,
-                use: "You pickup the rock."
-            },
-            {
-
-            }
-        ]
+        items: [1, 2, 3, 4],
     },
     {
         id: 2,
@@ -423,5 +351,129 @@ let rooms = [{
 //     name = loginName;
 //     email = loginEmail;
 // }]
+
+// INVENTORY FUNCTIONS AND GAME ITEMS
+function removeInventory() {
+    while (inventoryItemsElement.firstChild) {
+        inventoryItemsElement.removeChild(inventoryItemsElement.firstChild)
+    }
+}
+
+function setupInventory() {
+    populateInventory();
+    if (playerInventory.length < 1) {
+        hideElement(inventorySection)
+    };
+    if (playerInventory.length > 0) {
+        revealElement(inventorySection)
+    };
+}
+
+function populateInventory() {
+    console.log("playerInventory:");
+    console.log(playerInventory);
+    if (playerInventory.length < 1) {
+        removeInventory();
+    }
+    if (playerInventory.length > 0) {
+        removeInventory()
+        playerInventory.forEach(itemToAdd => {
+            const item = document.createElement('item');
+            item.innerText = itemToAdd.name;
+            inventoryItemsElement.appendChild(item);
+        })
+    }
+}
+
+gameItems: [{
+        id: 1,
+        name: "door",
+        pickup: false,
+        use: () => { boolOpen ? "the door is open." : "the door is closed." }
+    },
+    {
+        id: 2,
+        name: "bed",
+        pickup: false,
+        boolOpen: false,
+        use: "You do not feel tired."
+    },
+    {
+        id: 3,
+        name: "alarm",
+        pickup: false,
+        boolUse: false,
+        use: () => { boolUse === true ? "you switch off the alarm." : "the alarm is already off." }
+    },
+    {
+        id: 4,
+        name: "rock",
+        available: true,
+        pickup: true,
+        use: "You pickup the rock."
+    },
+]
+
+const displayTextSection = function() {
+    if (showText.length < 1) {
+        hideElement(textSection);
+        return
+    };
+    if (showText.length > 0) {
+        hideElement(inventorySection);
+        revealElement(textSection);
+        textElement.innerText = showText;
+        showText = ""
+        removeButtons();
+        createButton("Continue", () => gameTick())
+        return
+    };
+}
+
+function storyUpdate() {
+    // CHECK IF STORY HAS PROGRESSED
+    if (!progressStory) {
+        console.log("Story doesn't progress");
+        return
+    }
+    if (progressStory) {
+        console.log("Story continues...")
+        const newText = storyBook.find(newText => newText.id === storyPage)
+        showText += newText.text
+            //showText += "\n\n"
+        progressStory = false
+    }
+}
+
+// MAIN GAME STUFF
+
+// INITIAL GAME STATES
+let state = {}
+let textArrayIteration = 1
+let progressStory = true
+let playerMoved = false
+let playerLocation = 2
+let storyPage = 1
+let showText = ""
+const playerInventory = [];
+
+// GAME TICK
+function gameTick() {
+    console.log("GAME TICK")
+    playerMovement();
+    populateVerbOptions();
+    setupInventory();
+    storyUpdate();
+    displayTextSection();
+    // SHOW CURRENT ROOM IMAGE
+    const roomImage = roomImages.find(roomImage => roomImage.imgIndex === playerLocation)
+    imgElement.src = roomImage.imgURL
+        // UPDATE TEXT
+}
+
+// START
+function startGame() {
+    gameTick();
+}
 
 startGame();
