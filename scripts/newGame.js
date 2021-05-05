@@ -11,9 +11,9 @@ const imgElement = document.getElementById('room-image');
 const optionButtonsElement = document.getElementById('option-buttons');
 
 function play_beep() {
-    var snd = new Audio("https://www.soundjay.com/button/beep-08b.wav");
-    snd.play();
-    return false;
+    // var snd = new Audio("https://www.soundjay.com/button/beep-08b.wav");
+    // snd.play();
+    // return false;
 }
 
 const roomImages = [{
@@ -126,7 +126,7 @@ function selectVerbOption(option) {
     switch (option.id) {
         case 0: // MOVE
             // HOW TO CYCLE THROUGH ARRAY AND POPULATE ROOM NAMES FROM ROOMS.ADJACENT ARRAY????
-            currentRoom.adjacent.forEach(index => { // cycle through array
+            currentRoom.adjacent?.forEach(index => { // cycle through array
                 console.log("MOVE_TO_ADJACENT_ROOM")
                 const nextRoom = rooms.find(nextRoom => nextRoom.id === index);
                 createButton(nextRoom.name, () => selectMoveOption(index));
@@ -138,12 +138,12 @@ function selectVerbOption(option) {
             backOption();
             break;
         case 2: // PICK UP
-            console.log("currentRoom.objects:")
-            console.log(currentRoom.objects)
-            currentRoom.objects && currentRoom.objects.forEach(object => {
-                if (object.pickup && object.available) {
-                    const targetObject = object
-                    createButton(object.name, () => pickupObject(targetObject))
+            console.log(currentRoom.name + " available items:")
+            console.log(currentRoom.roomItems)
+            currentRoom.roomItems?.forEach(index => {
+                const targetItem = gameItems.find(targetItem => targetItem.id === index);
+                if (targetItem.pickup && targetItem.available) {
+                    createButton(targetItem.name, () => pickupObject(targetItem))
                 };
             });
             backOption();
@@ -206,7 +206,7 @@ let rooms = [{
             fire: false,
             oxygen: true
         },
-        items: [1, 2, 3, 4],
+        roomItems: [1, 2, 3],
     },
     {
         id: 2,
@@ -220,22 +220,7 @@ let rooms = [{
             fire: false,
             oxygen: true
         },
-        objects: [{
-                id: 1,
-                name: "door",
-                pickup: false,
-                use: () => {
-                    boolOpen ? "the door is open." : "the door is closed."
-                }
-            },
-            {
-                id: 2,
-                name: "rock",
-                available: true,
-                pickup: true,
-                use: "You pickup the rock."
-            }
-        ]
+ 
     },
     {
         id: 3,
@@ -249,22 +234,7 @@ let rooms = [{
             fire: false,
             oxygen: true
         },
-        objects: [{
-                id: 1,
-                name: "door",
-                pickup: false,
-                use: () => {
-                    boolOpen ? "the door is open." : "the door is closed."
-                }
-            },
-            {
-                id: 2,
-                name: "rock",
-                available: true,
-                pickup: true,
-                use: "You pickup the rock."
-            }
-        ]
+
     }, {
         id: 4,
         name: "Engine Room",
@@ -277,22 +247,6 @@ let rooms = [{
             fire: false,
             oxygen: true
         },
-        objects: [{
-                id: 1,
-                name: "door",
-                pickup: false,
-                use: () => {
-                    boolOpen ? "the door is open." : "the door is closed."
-                }
-            },
-            {
-                id: 2,
-                name: "rock",
-                available: true,
-                pickup: true,
-                use: "You pickup the rock."
-            }
-        ]
     }, {
         id: 5,
         name: "Bridge",
@@ -305,22 +259,6 @@ let rooms = [{
             fire: false,
             oxygen: true
         },
-        objects: [{
-                id: 1,
-                name: "door",
-                pickup: false,
-                use: () => {
-                    boolOpen ? "the door is open." : "the door is closed."
-                }
-            },
-            {
-                id: 2,
-                name: "rock",
-                available: true,
-                pickup: true,
-                use: "You pickup the rock."
-            }
-        ]
     }
 ]
 
@@ -385,31 +323,27 @@ function populateInventory() {
     }
 }
 
-gameItems: [{
-        id: 1,
-        name: "door",
-        pickup: false,
-        use: () => { boolOpen ? "the door is open." : "the door is closed." }
-    },
+const gameItems = [
     {
-        id: 2,
+        id: 1,
         name: "bed",
         pickup: false,
-        boolOpen: false,
+        canUse: true,
         use: "You do not feel tired."
     },
     {
-        id: 3,
+        id: 2,
         name: "alarm",
         pickup: false,
-        boolUse: false,
-        use: () => { boolUse === true ? "you switch off the alarm." : "the alarm is already off." }
+        canUse: true,
+        activated: false,
+        use: () => { this.activated === true ? "you switch off the alarm." : "the alarm is already off." }
     },
     {
-        id: 4,
+        id: 3,
         name: "rock",
-        available: true,
         pickup: true,
+        available: true,
         use: "You pickup the rock."
     },
 ]
