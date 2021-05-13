@@ -2,43 +2,54 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Star Mystery | GAME</title>
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/styles.css" />
     <script defer src="./scripts/newGame.js"></script>
 </head>
 
 <body>
     <header></header>
-    <!-- <div id="particles-js"></div>
+    <!-- Particles -->
+    <div id="particles-js"></div>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
-        particlesJS.load("particles-js", "./assets/particles.json", function() {
-            console.log("particles.json loaded...")
-        })
-    </script> -->
+        particlesJS.load("particles-js", "./assets/particles.json", function () {
+            console.log("particles.json loaded...");
+        });
+    </script>
+    <!-- top-section start -->
     <section id="top-section">
-        <!-- top-section start -->
         <article id="location-section">
             <div class="container">
                 <div id="location-element">LOCATION TEXT</div>
             </div>
         </article>
-        <!-- top-section end -->
     </section>
+    <!-- top-section end -->
 
+    <!-- main section start -->
     <section id="main-section">
+        <article id="terminal-section">
+            <div class="container-text">
+                <div id="terminal-text-output">TEST</div>
+            </div>
+            <div id="terminal-text-input">
+                <label>&#10097; <input id="terminal-text-input-box" class="input-box" type="text" tabindex="1" autofocus></input></label>
+            </div>
+        </article>
         <article id="image-section">
             <div class="container">
                 <img id="room-image" />
             </div>
         </article>
     </section>
+    <!-- main section end -->
 
+    <!-- bottom-section start -->
     <section id="bottom-section">
-        <!-- bottom-section start -->
         <aside id="text-section" class="bottom-child">
             <div class="container">
                 <div id="text-element">Text</div>
@@ -69,12 +80,10 @@
                 </div>
             </div>
         </nav>
-        <!-- bottom-section end -->
     </section>
+    <!-- bottom-section end -->
 
-    <footer>
-    </footer>
-
+    <footer></footer>
 </body>
 
 </html>

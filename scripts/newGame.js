@@ -1,43 +1,43 @@
 const textSection = document.getElementById("text-section");
 const textElement = document.getElementById("text-element");
-
 const locationSection = document.getElementById("location-section");
 const locationElement = document.getElementById("location-element");
-
 const inventorySection = document.getElementById("inventory-section");
 const inventoryItemsElement = document.getElementById("inventory-items");
-
+const imgSection = document.getElementById("image-section");
 const imgElement = document.getElementById("room-image");
 const optionButtonsElement = document.getElementById("option-buttons");
+const terminalSection = document.getElementById("terminal-section")
+const outputText = document.getElementById("terminal-text-output");
+const inputText = document.getElementById("terminal-text-input-box");
+let resultText = "";
+let showtext = "";
+
+inputText.addEventListener("keyup", function (event) {
+  if (event.key === "Enter") {
+    console.log("result: " + resultText);
+    return updateOutputText();
+  }
+});
+
+const updateOutputText = function () {
+  const door = doors.find((door) => door.id === 1);
+  if (inputText.value !== door.password) {
+    resultText = "INCORRECT PASSWORD";
+  }
+  if (inputText.value === door.password) {
+    resultText = "PASSWORD ACCEPTED";
+    door.locked = false;
+  }
+  outputText.innerText = resultText;
+  inputText.value = "";
+};
 
 function play_beep() {
   // var snd = new Audio("https://www.soundjay.com/button/beep-08b.wav");
   // snd.play();
   // return false;
 }
-
-const roomImages = [
-  {
-    imgIndex: 1,
-    imgURL: "./img/SHIP_CREW1.svg",
-  },
-  {
-    imgIndex: 2,
-    imgURL: "./img/SHIP_HUB.svg",
-  },
-  {
-    imgIndex: 3,
-    imgURL: "./img/SHIP_CREW2.svg",
-  },
-  {
-    imgIndex: 4,
-    imgURL: "./img/SHIP_ENGINE.svg",
-  },
-  {
-    imgIndex: 5,
-    imgURL: "./img/SHIP_BRIDGE.svg",
-  },
-];
 
 function hideElement(targetElement) {
   targetElement.style.display = "none";
@@ -96,11 +96,21 @@ function removeButtons() {
   }
 }
 
-function backOption() {
-    createButton("Back", () => populateVerbOptions())
+function backOption(textValue, clickEvent) {
+  if (textValue === undefined || clickEvent === undefined) {
+    createButton("Back", () => populateVerbOptions());
+  } else {
+    createButton(textValue, clickEvent);
   }
 
-const verbOptions = [{id: 0,text: "Move"},{id: 1,text: "Use"},{id: 2,text: "Pick up"},{id: 3,text: "Look at",}];
+}
+
+const verbOptions = [
+  { id: 0, text: "Move" },
+  { id: 1, text: "Use" },
+  { id: 2, text: "Pick up" },
+  { id: 3, text: "Look at" },
+];
 
 function populateVerbOptions() {
   //console.log("POPULATE_VERB_OPTIONS")
@@ -130,10 +140,12 @@ function selectVerbOption(option) {
       break;
     case 1: // USE
       console.log(option.id);
-      currentRoom?.roomItems.forEach(index => {
-        const targetItem = gameItems.find(targetItem => targetItem.id === index)
+      currentRoom.roomItems?.forEach((index) => {
+        const targetItem = gameItems.find(
+          (targetItem) => targetItem.id === index
+        );
         if (targetItem?.canUse) {
-            createButton(targetItem.name, () => useObject(targetItem));
+          createButton(targetItem.name, () => useObject(targetItem));
         }
       });
       backOption();
@@ -141,70 +153,169 @@ function selectVerbOption(option) {
     case 2: // PICK UP
       console.log(currentRoom.name + " available items:");
       console.log(currentRoom.roomItems);
-      currentRoom?.roomItems.forEach(index => {
-        const targetItem = gameItems.find(targetItem => targetItem.id === index);
-        if (targetItem.pickup && targetItem.available) { 
-          createButton(targetItem.name, () => pickupObject(targetItem));
+      currentRoom.roomItems?.forEach((index) => {
+        const targetItem = gameItems.find(
+          (targetItem) => targetItem.id === index
+        );
+        if (targetItem.pickup && targetItem.available) {
+          createButton(targetItem.name, () => pickUpObject(targetItem));
         }
       });
       backOption();
       break;
-    case 3: // Look at
+    case 3: // LOOK AT
+      currentRoom.roomItems?.forEach((index) => {
+        const targetItem = gameItems.find(
+          (targetItem) => targetItem.id === index
+        );
+        createButton(targetItem.name, () => lookAtObject(targetItem));
+      });
       console.log(option.id);
       backOption();
       break;
   }
 }
+function lookAtObject(targetItem) {
+  showText = targetItem.activated
+    ? targetItem.description[1]
+    : targetItem.description[0];
+  gameTick();
+}
 
-function pickupObject(targetObject) {
-  targetObject.available = false;
-  playerInventory.push(targetObject);
-  showText = "You picked up the " + targetObject.name;
+function pickUpObject(targetItem) {
+  targetItem.available = false;
+  playerInventory.push(targetItem);
+  showText = "You pick up the " + targetItem.name;
   gameTick();
 }
 
 function useObject(targetObject) {
-    console.log("USE OBJECT - "+ targetObject.name)
-    if (targetObject?.activated === true) {
-        showText = targetObject?.useText[1]
-    };
-    if (targetObject?.activated === false) {
-        showText = targetObject?.useText[0]
-        targetObject.activated = true
-    };
-    gameTick();
+  let result = "";
+  console.log("USE OBJECT - " + targetObject.name);
+  if (targetObject.activated === true) {
+    result = targetObject.useText[1];
+  }
+  if (targetObject.activated === false) { 
+    result = targetObject.useText[0];
+    targetObject.activated = true;
+  }
+  if (!targetObject.activated) {
+    result = targetObject.useText[0];
+  }
+  showText = result;
+  console.log("GET THIS FUNCTION TO WORK! "+targetObject.useAction)
+  targetObject.useAction();
+  gameTick();
 }
 
 function selectMoveOption(index) {
-    console.log("SELECT_MOVE_OPTION");
+  console.log("SELECT_MOVE_OPTION");
   // check if can move from current location into new location through door
   if (testDoorLocked(playerLocation, index)) {
-    showText = "You try to open the door, but it's locked."
+    showText = "You try to open the door, but it's locked.";
     gameTick();
   }
   if (!testDoorLocked(playerLocation, index)) {
     playerLocation = index;
     playerMoved = true;
     play_beep();
-    gameTick(); 
+    gameTick();
+  }
 }
+
+function testDoorLocked(fromPos, toPos) {
+  const testArr = [fromPos, toPos];
+  const door = doors.find((door) => {
+    return door.connectingRooms.every((val) => testArr.includes(val));
+  });
+  return door.locked;
 }
 
-// function showTextNode(textNodeIndex) {
-//     const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
+// class item {
+//     constructor(name, state, location, description) {
+//         this.name = name;
+//         this.state = state;
+//         this.location = location;
+//         this.description = description;
+//     }
+// };
 
-//     textElement.innerText = textNode.text
+// const worldItems = [
+//     raggedCoat = new item(
+//         "Ragged Coat",
+//         1,
+//         1,
+//         "You have owned the coat for many years. It smells faintly of home, and your arm pits.")
+// ];
 
-//     textNode.options.forEach(option => {
-//         if (showOption(option)) {
-//             const button = document.createElement('button')
-//             button.innerText = option.text
-//             button.classList.add('btn')
-//             button.addEventListener('click', () => selectOption(option))
-//             optionButtonsElement.appendChild(button)
-//         }
-//     })
-// }
+// const player = [{
+//     name = loginName;
+//     email = loginEmail;
+// }]
+
+// INVENTORY FUNCTIONS AND GAME ITEMS
+function removeInventory() {
+  while (inventoryItemsElement.firstChild) {
+    inventoryItemsElement.removeChild(inventoryItemsElement.firstChild);
+  }
+}
+
+function setupInventory() {
+  populateInventory();
+}
+
+function populateInventory() {
+  console.log("playerInventory:");
+  console.log(playerInventory);
+  if (playerInventory.length < 1) {
+    removeInventory();
+  }
+  if (playerInventory.length > 0) {
+    removeInventory();
+    playerInventory.forEach((itemToAdd) => {
+      const item = document.createElement("item");
+      item.innerText = itemToAdd.name;
+      inventoryItemsElement.appendChild(item);
+    });
+  }
+}
+
+const activateTerminal = function(){
+  console.log("ACTIVATE TERMINAL");
+  hideElement(imgSection);
+  revealElement(terminalSection);
+  backOption("Exit",closeTerminal);
+};
+
+const closeTerminal = function(){
+  console.log("CLOSE TEMRINAL");
+  hideElement(terminalSection);
+  revealElement(imgSection);
+  populateVerbOptions();
+};
+
+const roomImages = [
+  {
+    imgIndex: 1,
+    imgURL: "./img/SHIP_CREW1.svg",
+  },
+  {
+    imgIndex: 2,
+    imgURL: "./img/SHIP_HUB.svg",
+  },
+  {
+    imgIndex: 3,
+    imgURL: "./img/SHIP_CREW2.svg",
+  },
+  {
+    imgIndex: 4,
+    imgURL: "./img/SHIP_ENGINE.svg",
+  },
+  {
+    imgIndex: 5,
+    imgURL: "./img/SHIP_BRIDGE.svg",
+  },
+];
 
 const rooms = [
   {
@@ -219,7 +330,7 @@ const rooms = [
       fire: false,
       oxygen: true,
     },
-    roomItems: [1, 2, 3],
+    roomItems: [1, 2, 3, 4],
   },
   {
     id: 2,
@@ -278,8 +389,9 @@ const rooms = [
 const doors = [
   {
     id: 1,
-    connectingRooms: [2, 5],
+    connectingRooms: [2, 1],
     locked: true,
+    password: "mordida",
   },
   {
     id: 2,
@@ -293,103 +405,60 @@ const doors = [
   },
   {
     id: 4,
-    connectingRooms: [2, 1],
+    connectingRooms: [2, 5],
     locked: true,
   },
 ];
-
-function testDoorLocked(fromPos, toPos) {
-  const testArr = [fromPos, toPos];
-  const door = doors.find((door) => {
-    return door.connectingRooms.every((val) => testArr.includes(val));
-  });
-  return door.locked;
-}
 
 // Item States
 // 0: is out-of-play (destroyed or not yet introduced)
 // 1: is somewhere in the game world, but not yet found by the player
 // 2: has been handled by the player e.g. taken and then dropped
 // 3: is carried by the player.
-
-// class item {
-//     constructor(name, state, location, description) {
-//         this.name = name;
-//         this.state = state;
-//         this.location = location;
-//         this.description = description;
-//     }
-// };
-
-// const worldItems = [
-//     raggedCoat = new item(
-//         "Ragged Coat",
-//         1,
-//         1,
-//         "You have owned the coat for many years. It smells faintly of home, and your arm pits.")
-// ];
-
-// const player = [{
-//     name = loginName;
-//     email = loginEmail;
-// }]
-
-// INVENTORY FUNCTIONS AND GAME ITEMS
-function removeInventory() {
-  while (inventoryItemsElement.firstChild) {
-    inventoryItemsElement.removeChild(inventoryItemsElement.firstChild);
-  }
-}
-
-function setupInventory() {
-  populateInventory();
-}
-
-function populateInventory() {
-  console.log("playerInventory:");
-  console.log(playerInventory);
-  if (playerInventory.length < 1) {
-    removeInventory();
-  }
-  if (playerInventory.length > 0) {
-    removeInventory();
-    playerInventory.forEach((itemToAdd) => {
-      const item = document.createElement("item");
-      item.innerText = itemToAdd.name;
-      inventoryItemsElement.appendChild(item);
-    });
-  }
-}
-
 const gameItems = [
   {
     id: 1,
+    state: 1,
     name: "bed",
     pickup: false,
     canUse: true,
-    useText: ["You do not feel tired."]
+    description: ["An unmade bed."],
+    useText: ["You do not feel tired."],
   },
   {
     id: 2,
+    state: 1,
     name: "alarm",
     pickup: false,
     canUse: true,
     activated: false,
-    useText : ["you switch off the alarm.","the alarm is already off."]
+    description: [
+      "An alarm, which is shreking it's head off.",
+      "A thankfully silent alarm.",
+    ],
+    useText: ["you switch off the alarm.", "the alarm is already off."],
   },
   {
     id: 3,
+    state: 1,
     name: "rock",
     pickup: true,
     available: true,
-    useText: ["You pickup the rock."]
+    description: ["Just a rock"],
   },
   {
     id: 4,
+    state: 1,
     name: "terminal",
     pickup: false,
     canUse: true,
-    useText: ["You hit return, and a window titled \"login\" appears on the screen."]
+    description: [
+      "It's a computer terminal. There are a few options showing on the screen.",
+    ],
+    useText: [
+      'You hit return, and a window titled "login" appears on the screen.',
+    ],
+    useAction: activateTerminal,
   },
 ];
 

@@ -1,112 +1,129 @@
 *,
 *::before,
 *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    overflow: none;
-    max-width: 100vw;
-    max-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: none;
+  max-width: 100vw;
+  max-height: 100vh;
 }
 
- :root {
-    --tealRust: #288c86;
-    --darkMetal: #17201f;
+:root {
+  --tealRust: #288c86;
+  --darkMetal: #17201f;
 }
 
 #particles-js {
-    position: absolute;
-    z-index: -1;
-    overflow: auto;
-    width: 100vw;
-    height: 100vh;
+  position: absolute;
+  z-index: -1;
+  overflow: auto;
+  width: 100vw;
+  height: 100vh;
 }
 
 @font-face {
-    font-family: customFont1;
-    src: url(../fonts/AgharaProRegular.ttf);
+  font-family: customFont1;
+  src: url(../fonts/AgharaProRegular.ttf);
 }
 
 body {
-    position: static;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
-    background-color: var(--darkMetal);
-    color: var(--tealRust);
-    font-family: Tahoma, Geneva, Verdana, sans-serif;
+  position: static;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--darkMetal);
+  color: var(--tealRust);
+  font-family: Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body header {
-    padding-bottom: 50px;
-    font-family: customFont1;
-    text-shadow: 2px 2px black;
+  padding-bottom: 50px;
+  font-family: customFont1;
+  text-shadow: 2px 2px black;
 }
 
 body section {
-    max-width: 85vw;
-    width: 800px;
+  max-width: 85vw;
+  width: 800px;
 }
 
 body article {
-    margin: 10px
+  margin: 10px;
 }
 
 body aside {
-    margin: 15px
+  margin: 15px;
 }
 
 body nav {
-    margin: 15px
+  margin: 15px;
 }
 
 body #top-section {
-    display: flex-inline;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-content: flex-start;
+  display: flex-inline;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: flex-start;
+  width: 20%;
 }
 
 body #main-section {
-    display: flex-inline;
-    flex-direction: column;
-    justify-content: center;
+  display: flex-inline;
+  flex-direction: column;
+  justify-content: center;
 }
 
 body #bottom-section {
-    margin-top: 5px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    max-height: 200px;
-    min-height: 185px;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-height: 200px;
+  min-height: 185px;
 }
 
 body #bottom-section .bottom-child {
-    flex: 1;
-    justify-content: center;
+  flex: 1;
+  justify-content: center;
 }
 
 body #bottom-section #inventory-section {
-    display: flex;
-    order: -1;
+  display: flex;
+  order: -1;
 }
 
 body #bottom-section #option-buttons {
-    order: 2;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items: stretch;
-    align-content: stretch;
+  order: 2;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: stretch;
+  align-content: stretch;
 }
 
 body .container {
+  flex: 1;
+  background-image: url("../img/metal_test.png");
+  padding: 10px;
+  margin: 0px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 2px;
+  color: var(--tealRust);
+  text-shadow: 2px 2px var(--darkMetal);
+  text-align: center;
+}
+
+body #location-section .container {
+    padding: 0;
+}
+
+body .container-text {
     flex: 1;
     background-image: url("../img/metal_test.png");
     padding: 10px;
@@ -115,89 +132,104 @@ body .container {
     box-shadow: 0 0 10px 2px;
     color: var(--tealRust);
     text-shadow: 2px 2px var(--darkMetal);
-    text-align: center;
-}
-
-body #location-section .container {
-    padding: 0;
-}
-
+    text-align: left;
+  }
+  
 body #image-section #room-image {
-    max-height: 25vh;
-    overflow: auto;
+  max-height: 25vh;
+  overflow: auto;
 }
 
 body .btn {
-    background-color: var(--darkMetal);
-    border: 1px solid var(--tealRust);
-    border-radius: 5px;
-    padding: 5px 10px;
-    color: var(--tealRust);
-    outline: none;
-    cursor: pointer;
+  background-color: var(--darkMetal);
+  border: 1px solid var(--tealRust);
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: var(--tealRust);
+  outline: none;
+  cursor: pointer;
 }
 
 body .btn-grid {
-    display: grid;
-    gap: 10px;
-    max-height: 25vh;
+  display: grid;
+  gap: 10px;
+  max-height: 25vh;
 }
 
 body .btn-grid .btn:hover {
-    background-color: var(--tealRust);
-    color: var(--darkMetal);
+  background-color: var(--tealRust);
+  color: var(--darkMetal);
 }
 
 footer {
-    padding-top: 100px;
-    text-align: center;
+  padding-top: 100px;
+  text-align: center;
 }
 
 footer a {
-    color: teal;
+  color: teal;
 }
 
 #text-section #text {
-    padding: 0 50px;
+  padding: 0 50px;
 }
 
 #option-section #option-buttons {
-    margin: 0;
+  margin: 0;
 }
 
+/* Terminal Stuff */
+
+#terminal-section {
+  display: none;
+  flex-direction:column;
+  font-family: Consolas;
+  font-weight: bolder;
+  font-size: 16px;
+}
+
+#terminal-section .input-box {
+  border: none;
+}
+
+#terminal-section .input-box:focus {
+  border: none;
+  background-color: #e3e3e3;
+  outline: none;
+}
 
 /* Login Stuff */
 
 body #login-button {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 #login-section {
-    justify-content: space-between;
-    display: flex;
+  justify-content: space-between;
+  display: flex;
 }
 
 #login-section label {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    text-align: left;
-    width: 315px;
-    line-height: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  text-align: left;
+  width: 315px;
+  line-height: 30px;
 }
 
 #login-section input {
-    height: 30px;
-    flex: 0 0 175px;
-    margin-bottom: 5px;
-    margin-left: 20px;
+  height: 30px;
+  flex: 0 0 175px;
+  margin-bottom: 5px;
+  margin-left: 20px;
 }
 
 #login-section #go-button {
-    float: right;
+  float: right;
 }
-
 
 /* Media Queries */
 
-@media(max-width:568px) {}
+@media (max-width: 568px) {
+}
