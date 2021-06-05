@@ -280,7 +280,7 @@ function populateInventory() {
     });
   }
 }
-
+// TERMINAL BLOCK
 const activateTerminal = function(){
   console.log("ACTIVATE TERMINAL");
   terminalMode = true;
