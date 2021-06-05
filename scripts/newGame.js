@@ -12,6 +12,7 @@ const outputText = document.getElementById("terminal-text-output");
 const inputText = document.getElementById("terminal-text-input-box");
 let resultText = "";
 let showtext = "";
+let terminalMode = false;
 
 inputText.addEventListener("keyup", function (event) {
   if (event.key === "Enter") {
@@ -41,12 +42,12 @@ function play_beep() {
 
 function hideElement(targetElement) {
   targetElement.style.display = "none";
-  console.log("Element hidden = " + inventorySection.id);
+  console.log("Element hidden = " + targetElement.id);
 }
 
 function revealElement(targetElement) {
   targetElement.style.display = "flex";
-  console.log("Element revealed = " + inventorySection.id);
+  console.log("Element revealed = " + targetElement.id);
 }
 
 // CHECK IF PLAYER HAS MOVED TO A NEW ROOM
@@ -189,6 +190,7 @@ function pickUpObject(targetItem) {
   gameTick();
 }
 
+// WHAT HAPPENS WHEN YOU USE AN OBJECT IN A ROOM
 function useObject(targetObject) {
   let result = "";
   console.log("USE OBJECT - " + targetObject.name);
@@ -203,7 +205,6 @@ function useObject(targetObject) {
     result = targetObject.useText[0];
   }
   showText = result;
-  console.log("GET THIS FUNCTION TO WORK! "+targetObject.useAction)
   targetObject.useAction();
   gameTick();
 }
@@ -282,16 +283,19 @@ function populateInventory() {
 
 const activateTerminal = function(){
   console.log("ACTIVATE TERMINAL");
+  terminalMode = true;
   hideElement(imgSection);
+  hideElement(inventorySection);
   revealElement(terminalSection);
-  backOption("Exit",closeTerminal);
+  removeButtons();
+  createButton('Exit',()=>closeTerminal())
 };
 
 const closeTerminal = function(){
   console.log("CLOSE TEMRINAL");
   hideElement(terminalSection);
-  revealElement(imgSection);
-  populateVerbOptions();
+  terminalMode = false;
+  gameTick();
 };
 
 const roomImages = [
@@ -506,9 +510,17 @@ let storyPage = 1;
 let showText = "";
 const playerInventory = [];
 
+function testContinueGame(){
+  return (terminalMode === true ? false : true);
+};
+
 // GAME TICK
 function gameTick() {
   console.log("GAME TICK");
+  if (testContinueGame() === false) {
+    console.log("it works!")
+    return
+  }
   playerMovement();
   populateVerbOptions();
   setupInventory();
