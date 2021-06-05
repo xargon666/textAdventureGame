@@ -7,32 +7,14 @@ const inventoryItemsElement = document.getElementById("inventory-items");
 const imgSection = document.getElementById("image-section");
 const imgElement = document.getElementById("room-image");
 const optionButtonsElement = document.getElementById("option-buttons");
-const terminalSection = document.getElementById("terminal-section")
-const outputText = document.getElementById("terminal-text-output");
-const inputText = document.getElementById("terminal-text-input-box");
+const terminalSection = document.getElementById("terminal-container")
+const terminalOutputText = document.getElementById("terminal-text-output");
+const terminalInputText = document.getElementById("terminal-text-input-box");
 let resultText = "";
 let showtext = "";
 let terminalMode = false;
 
-inputText.addEventListener("keyup", function (event) {
-  if (event.key === "Enter") {
-    console.log("result: " + resultText);
-    return updateOutputText();
-  }
-});
 
-const updateOutputText = function () {
-  const door = doors.find((door) => door.id === 1);
-  if (inputText.value !== door.password) {
-    resultText = "INCORRECT PASSWORD";
-  }
-  if (inputText.value === door.password) {
-    resultText = "PASSWORD ACCEPTED";
-    door.locked = false;
-  }
-  outputText.innerText = resultText;
-  inputText.value = "";
-};
 
 function play_beep() {
   // var snd = new Audio("https://www.soundjay.com/button/beep-08b.wav");
@@ -280,6 +262,7 @@ function populateInventory() {
     });
   }
 }
+
 // TERMINAL BLOCK
 const activateTerminal = function(){
   console.log("ACTIVATE TERMINAL");
@@ -293,9 +276,35 @@ const activateTerminal = function(){
 
 const closeTerminal = function(){
   console.log("CLOSE TEMRINAL");
-  hideElement(terminalSection);
   terminalMode = false;
+  hideElement(terminalSection);
+  revealElement(imgSection);
+  revealElement(inventorySection);
   gameTick();
+};
+
+terminalInputText.addEventListener("keyup", function (event) {
+  if (event.key === "Enter") {
+    console.log("result: " + resultText);
+    return updateOutputText();
+  }
+});
+
+const updateOutputText = function () {
+  const door = doors.find((door) => door.id === 1);
+  if (terminalInputText.value !== door.password) {
+    resultText = resultText + "INCORRECT PASSWORD";
+    let lineCount = 1;
+    lineCount = resultText.match(/n/g);
+    debugger;
+    if(lineCount < 5){resultText + (("\n")*(5-lineCount))}
+  }
+  if (terminalInputText.value === door.password) {
+    resultText = resultText + "PASSWORD ACCEPTED";
+    door.locked = false;
+  }
+  terminalOutputText.innerText = resultText;
+  terminalInputText.value = "";
 };
 
 const roomImages = [

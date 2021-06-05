@@ -12,6 +12,7 @@
 :root {
   --tealRust: #288c86;
   --darkMetal: #17201f;
+  --terminal-black: rgb(36, 36, 36);
 }
 
 #particles-js {
@@ -123,18 +124,6 @@ body #location-section .container {
     padding: 0;
 }
 
-body .container-text {
-    flex: 1;
-    background-image: url("../img/metal_test.png");
-    padding: 10px;
-    margin: 0px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px 2px;
-    color: var(--tealRust);
-    text-shadow: 2px 2px var(--darkMetal);
-    text-align: left;
-  }
-  
 body #image-section #room-image {
   max-height: 25vh;
   overflow: auto;
@@ -179,23 +168,47 @@ footer a {
 }
 
 /* Terminal Stuff */
-
-#terminal-section {
-  display: none;
-  flex-direction:column;
+#terminal-container {
+  min-height:100px;
+  padding: 10px;
+  margin: 0px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 2px;
+  background-color: var(--terminal-black);
+  color: green;
+  text-shadow: 2px 2px var(--darkMetal);
+  text-align: left;
   font-family: Consolas;
   font-weight: bolder;
   font-size: 16px;
-}
+  display: none;
+  flex-direction:column;
+  }
 
-#terminal-section .input-box {
+#terminal-container .input-box {
+  position: relative;
   border: none;
-}
-
-#terminal-section .input-box:focus {
-  border: none;
-  background-color: #e3e3e3;
   outline: none;
+  background-color: var(--terminal-black);
+  color: green;
+  font-family: Consolas;
+  font-weight: strong;
+  font-size: 16px;
+}
+
+#terminal-container .input-box:focus {
+  color: rgb(0,255,0)
+  
+}
+
+#terminal-text-output{
+  flex:1;
+  background-color:red;
+}
+
+#terminal-text-input{
+  flex:2;
+  background-color:blue;
 }
 
 /* Login Stuff */
