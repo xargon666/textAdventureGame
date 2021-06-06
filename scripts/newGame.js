@@ -10,7 +10,7 @@ const optionButtonsElement = document.getElementById("option-buttons");
 const terminalSection = document.getElementById("terminal-container")
 const terminalOutputText = document.getElementById("terminal-text-output");
 const terminalInputText = document.getElementById("terminal-text-input-box");
-let resultText = "";
+
 let showtext = "";
 let terminalMode = false;
 
@@ -264,6 +264,8 @@ function populateInventory() {
 }
 
 // TERMINAL BLOCK
+let resultText = "";
+
 const activateTerminal = function(){
   console.log("ACTIVATE TERMINAL");
   terminalMode = true;
@@ -271,6 +273,8 @@ const activateTerminal = function(){
   hideElement(inventorySection);
   revealElement(terminalSection);
   removeButtons();
+  terminalOutputText.innerText = "ENTER PASSWORD\n";
+  resultText = "";
   createButton('Exit',()=>closeTerminal())
 };
 
@@ -290,19 +294,28 @@ terminalInputText.addEventListener("keyup", function (event) {
   }
 });
 
+function addLineFeeds(string,num){
+  let result = "";
+  for(i=0;i<num;i++){
+    result = string + "\n"
+  };
+  return result;
+}
+
 const updateOutputText = function () {
   const door = doors.find((door) => door.id === 1);
-  if (terminalInputText.value !== door.password) {
-    resultText = resultText + "INCORRECT PASSWORD";
-    let lineCount = 1;
-    lineCount = resultText.match(/n/g);
-    debugger;
-    if(lineCount < 5){resultText + (("\n")*(5-lineCount))}
-  }
-  if (terminalInputText.value === door.password) {
-    resultText = resultText + "PASSWORD ACCEPTED";
+  if (door.locked === false){
+    resultText = `${resultText}DOOR ALREADY UNLOCKED\n`;
+  } else if (terminalInputText.value !== door.password) {
+    resultText = `${resultText}INCORRECT PASSWORD\n`;
+  } else if (terminalInputText.value === door.password) {
+    resultText = `${resultText}PASSWORD ACCEPTED: DOOR UNLOCKED\n`;
     door.locked = false;
   }
+  let lineCount = resultText.split("\n").length
+  if (lineCount >= 7){
+    resultText = resultText.split("\n").slice(1).join("\n")
+  };
   terminalOutputText.innerText = resultText;
   terminalInputText.value = "";
 };

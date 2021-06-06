@@ -202,13 +202,14 @@ footer a {
 }
 
 #terminal-text-output{
+  min-height:6em;
   flex:1;
-  background-color:red;
+
 }
 
 #terminal-text-input{
   flex:2;
-  background-color:blue;
+
 }
 
 /* Login Stuff */
