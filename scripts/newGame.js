@@ -11,10 +11,10 @@ const terminalSection = document.getElementById("terminal-container")
 const terminalOutputText = document.getElementById("terminal-text-output");
 const terminalInputText = document.getElementById("terminal-text-input-box");
 
+// MAIN GAME VARIABLES
+let gameMode = 0
 let showtext = "";
 let terminalMode = false;
-
-
 
 function play_beep() {
   // var snd = new Audio("https://www.soundjay.com/button/beep-08b.wav");
@@ -269,21 +269,20 @@ let resultText = "";
 const activateTerminal = function(){
   console.log("ACTIVATE TERMINAL");
   terminalMode = true;
-  hideElement(imgSection);
-  hideElement(inventorySection);
+  [imgSection,inventorySection,textSection].forEach(hideElement)
   revealElement(terminalSection);
   removeButtons();
   terminalOutputText.innerText = "ENTER PASSWORD\n";
   resultText = "";
-  createButton('Exit',()=>closeTerminal())
+  terminalInputText.focus();
+  createButton('Exit',()=>closeTerminal());
 };
 
 const closeTerminal = function(){
   console.log("CLOSE TEMRINAL");
   terminalMode = false;
   hideElement(terminalSection);
-  revealElement(imgSection);
-  revealElement(inventorySection);
+  [imgSection,inventorySection,textSection].forEach(revealElement)
   gameTick();
 };
 
@@ -293,14 +292,6 @@ terminalInputText.addEventListener("keyup", function (event) {
     return updateOutputText();
   }
 });
-
-function addLineFeeds(string,num){
-  let result = "";
-  for(i=0;i<num;i++){
-    result = string + "\n"
-  };
-  return result;
-}
 
 const updateOutputText = function () {
   const door = doors.find((door) => door.id === 1);
@@ -484,7 +475,7 @@ const gameItems = [
     useText: [
       'You hit return, and a window titled "login" appears on the screen.',
     ],
-    useAction: activateTerminal,
+    useAction: () => changeGameMode(1)
   },
 ];
 
@@ -500,7 +491,7 @@ const displayTextSection = function () {
     textElement.innerText = showText;
     showText = "";
     removeButtons();
-    createButton("Continue", () => gameTick());
+    createButton("Continue", () => continueGame());
     return;
   }
 };
@@ -520,7 +511,6 @@ function storyUpdate() {
   }
 }
 
-// MAIN GAME STUFF
 
 // INITIAL GAME STATES
 let state = {};
@@ -535,6 +525,25 @@ const playerInventory = [];
 function testContinueGame(){
   return (terminalMode === true ? false : true);
 };
+
+// GAMEMODE SWITCH
+function continueGame(){
+  switch(gameMode){
+    case 0: 
+      gameTick();
+      break;
+    case 1: // ACTIVATE TERMINAL GAMEMODE
+      activateTerminal();
+      break;
+    default:
+      gameTick();
+  }
+
+}
+
+function changeGameMode(val) {
+  gameMode = val;
+}
 
 // GAME TICK
 function gameTick() {
