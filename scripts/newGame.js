@@ -14,9 +14,9 @@ const terminalInputText = document.getElementById("terminal-text-input-box");
 // MAIN GAME VARIABLES
 let gameMode = 0
 let showtext = "";
-let terminalMode = false;
+let terminalMode = false; 
 
-function play_beep() {
+function play_beep() {   
   // var snd = new Audio("https://www.soundjay.com/button/beep-08b.wav");
   // snd.play();
   // return false;
