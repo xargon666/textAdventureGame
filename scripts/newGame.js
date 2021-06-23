@@ -281,7 +281,7 @@ const activateTerminal = function(){
 const closeTerminal = function(){
   console.log("CLOSE TEMRINAL");
   terminalMode = false;
-  gameMode = 0;
+  changeGameMode(0);
   hideElement(terminalSection);
   [imgSection,inventorySection,textSection].forEach(revealElement)
   gameTick();
