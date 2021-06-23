@@ -52,7 +52,7 @@ function playerMovement() {
   }
 }
 
-const textBook = [
+const storyBook = [
   {
     id: 1,
     room_id: 1,
@@ -505,8 +505,9 @@ function storyUpdate() {
   }
   if (progressStory) {
     console.log("Story continues...");
-    const newText = textBook.find((newText) => newText.id === storyPage);
+    const newText = storyBook.find((newText) => newText.id === storyPage);
     showText += newText.text;
+    chapter += 1
     //showText += "\n\n"
     progressStory = false;
   }
@@ -522,8 +523,11 @@ let playerLocation = 1;
 let storyPage = 1;
 let showText = "";
 const playerInventory = [];
+let chapter = 0;
 
-function testContinueGame(){
+const activeTriggers = [];
+
+function testTriggers(){
   return (terminalMode === true ? false : true);
 };
 
@@ -546,12 +550,27 @@ function changeGameMode(val) {
   gameMode = val;
 }
 
+const chapterEvents = [
+  {
+id:1,
+event_description:"Alarm is going off preventing you from doing anything else.",
+event: () => {if (){
+  
+}}
+}
+]
+
+function checkChapterEvents(chapter){
+
+}
+
 // GAME TICK
 function gameTick() {
+  // ADD A FUNCTION HERE TO INTERUPT NORMAL EVENTS BASED ON A GAMESTATE CONDITION
+  checkChapterEvents(chapter);
   console.log("GAME TICK");
-  if (testContinueGame() === false) {
+  if (testTriggers()) {
     console.log("it works!")
-    return
   }
   playerMovement();
   populateVerbOptions();
