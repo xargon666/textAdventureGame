@@ -433,6 +433,33 @@ const doors = [
 // 1: is somewhere in the game world, but not yet found by the player
 // 2: has been handled by the player e.g. taken and then dropped
 // 3: is carried by the player.
+
+// Item Interaction Type
+// 0: Cannot be picked up, cannot be used
+// 1: Cannot be picked up, can be used
+// 2: Can be picked up, can be used
+
+// ITEM CONSTRUCTOR BLOCK
+class worldItem {
+  constructor(props){
+    const {
+      id,
+      state,
+      interactionType,
+      name,
+      useText,
+      description
+    } = props;
+    Object.assign(this,props);
+  }
+}
+const bed1 = new worldItem({
+  description: "It's your standard bed, just big enough for the average human."
+})
+
+console.log(bed1.description)
+
+
 const gameItems = [
   {
     id: 1,
