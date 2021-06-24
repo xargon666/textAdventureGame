@@ -513,7 +513,6 @@ function storyUpdate() {
   }
 }
 
-
 // INITIAL GAME STATES
 let state = {};
 let textArrayIteration = 1;
@@ -554,9 +553,10 @@ const chapterEvents = [
   {
 id:1,
 event_description:"Alarm is going off preventing you from doing anything else.",
-event: () => {if (){
-  
-}}
+event: function(){
+  if (lol){
+}
+}
 }
 ]
 
