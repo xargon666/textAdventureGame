@@ -31,7 +31,7 @@ function play_beep() {
       );
       locationElement.innerText = "Location: " + currentRoom.name;
     }
-    if (playerMoved) {
+    else {
       console.log("Player position has changed!");
       const currentRoom = rooms.find(
         (currentRoom) => currentRoom.id === playerLocation
@@ -40,6 +40,7 @@ function play_beep() {
       showText = "Player moved to the " + currentRoom.name;
       playerMoved = false;
     }
+    return
   }
 
 // Button Management Functions
@@ -253,4 +254,4 @@ function removeInventory() {
     gameMode = val;
   }
 
-  export 
+  export {startGame,play_beep,hideElement,revealElement,playerMovement,createButton,removeButtons,backOption,populateVerbOptions,selectVerbOption,lookAtObject,pickUpObject,useObject,selectMoveOption,testDoorLocked,removeInventory,setupInventory,populateInventory,storyUpdate,testTriggersj,continueGame,changeGameMode}
